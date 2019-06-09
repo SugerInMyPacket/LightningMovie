@@ -10,7 +10,6 @@ ui(new Ui::dlgAddMovie)
     ui->labMovieDirector->setText(MOVIE_DIRECTOR);
     ui->labMovieStar->setText(MOVIE_STAR);
     ui->btnOkay->setText(BTN_OKAY);
-    strMovie = new QString[4];
 }
 
 dlgAddMovie::~dlgAddMovie()
@@ -19,19 +18,27 @@ dlgAddMovie::~dlgAddMovie()
 }
 
 
-QString* dlgAddMovie::getMovie(){
-    strMovie[1] = ui->edtMovieName->text();
-    strMovie[2] = ui->edtMovieDirector->text();
-    strMovie[3] = ui->edtMovieStar->text();
+QString dlgAddMovie::getMovie(){
     //15是电影编号的位数
-    char id[15];
-    for (size_t i= 0; i<15; ++i) {
-        id[i] = rand()%26 + 97;
+    srand(static_cast<unsigned>(time(nullptr)));
+    char id[16];
+    id[0] = rand()%26 + 97;
+    for (size_t i= 1; i<15; ++i) {
+        do{
+            id[i] = rand()%26 + 97;
+        }while(id[i] == id[i-1]);
     }
+    id[15] = '\0'; //不能省略
     QString strMovieId(id);
-    strMovie[0] = strMovieId;
+    strMovie = "'"+strMovieId;
+    strMovie += "','" + ui->edtMovieName->text();
+    strMovie += "','" + ui->edtMovieDirector->text();
+    strMovie += "','" + ui->edtMovieStar->text()+"'";
     return strMovie;
 }
+
+//ligbnkczmdabzdy
+//ybcfwektdpfakwa
 
 //QDialog *dlgData = new QDialog(this);
 //dlgData->setFont(*font);

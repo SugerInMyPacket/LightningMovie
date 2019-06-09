@@ -171,17 +171,16 @@ void AdminMainWindow::addMovie(){
         return;
     }
 
+    QString movie;
     dlgAddMovie *addMovie = new dlgAddMovie();
     if(addMovie->exec() == QDialog::Accepted){
-        qDebug()<<"dhsgf"<<endl;
-        QString *movie = addMovie->getMovie();
-        for (size_t i=0;i<4;++i) {
-            qDebug()<<movie[i]<<endl;
-        }
+        movie = addMovie->getMovie();
+        qDebug()<<movie<<endl;
     }
 
-
-
+    QSqlQuery query(*dbSQL);
+    QString sql = "call addMovie(" + movie+");";
+    query.exec(sql);
 }
 
 void AdminMainWindow::removeMovie(){

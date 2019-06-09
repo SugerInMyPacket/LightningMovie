@@ -4,6 +4,7 @@
 #include <QDialog>
 #include "stringsource.h"
 
+
 namespace Ui {
 class dlgAddMovie;
 }
@@ -17,9 +18,9 @@ explicit dlgAddMovie(QWidget *parent = nullptr);
 ~dlgAddMovie();
 
 private:
-    QString *strMovie;
+    QString strMovie;
 public:
-    QString* getMovie();
+    QString getMovie();
 private slots:
     void on_btnOkay_clicked();
 
