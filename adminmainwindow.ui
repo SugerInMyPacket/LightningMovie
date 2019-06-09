@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>856</width>
-    <height>573</height>
+    <width>826</width>
+    <height>421</height>
    </rect>
   </property>
   <property name="font">
@@ -88,7 +88,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>856</width>
+     <width>826</width>
      <height>26</height>
     </rect>
    </property>
@@ -99,7 +99,7 @@
     <addaction name="actShowMovie"/>
     <addaction name="actModifyMovie"/>
     <addaction name="actAddMoive"/>
-    <addaction name="actDeleteMovie"/>
+    <addaction name="actRemoveMovie"/>
    </widget>
    <widget class="QMenu" name="muTicket">
     <property name="title">
@@ -310,13 +310,13 @@
     <string>addMoive</string>
    </property>
   </action>
-  <action name="actDeleteMovie">
+  <action name="actRemoveMovie">
    <property name="icon">
     <iconset resource="icon.qrc">
      <normaloff>:/IconResource/delete.png</normaloff>:/IconResource/delete.png</iconset>
    </property>
    <property name="text">
-    <string>deleteMovie</string>
+    <string>removeMovie</string>
    </property>
   </action>
   <action name="actModifyMovie">

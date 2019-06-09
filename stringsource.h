@@ -26,9 +26,11 @@ const QString BTN_FIND_PASS = "忘记密码(&F)";
 const QString BTN_SUBMIT = "提交(&S)";
 const QString BTN_QUIT = "离开(&Q)";
 const QString BTN_SEND = "发送";
+const QString BTN_OKAY = "确定(&O)";
 
 const QString ERR_DB_OPEN = "数据库连接错误!";
 const QString ERR_DB_NULL = "还未连接数据库!";
+const QString ERR_DB_DISCONNECT = "数据库未连接！";
 const QString ERR_DB_QUERY = "数据库查询错误!";
 const QString ERR_CRITICLE_PSWD = "密码错误!";
 const QString ERR_CRITICLE_LOGIN = "登录错误";
@@ -60,4 +62,9 @@ const QString SQL_USE_DB = "use "+ SQL_DB_NAME +";";
 const QString SQL_SHOW_TABLES = "show tables;";
 
 const QString SEARCH =  "查找";
+
+const QString MOVIE_DIRECTOR = "电影导演";
+const QString MOVIE_STAR = "电影主演";
+const QString MOVIE_NAME = "电影名称";
+
 #endif // STRINGSOURCE_H

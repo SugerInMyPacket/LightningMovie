@@ -7,6 +7,7 @@
 #include <qtableview.h>
 #include <qtabbar.h>
 #include <qsplitter.h>
+#include <qlabel.h>
 #include <qstandarditemmodel.h>
 #include <QStandardItem>
 #include <qmap.h>
@@ -16,6 +17,7 @@
 #include <qdatetime.h>
 #include "dbconnector.h"
 #include "stringsource.h"
+#include "dlgaddmovie.h"
 
 
 namespace Ui {
@@ -33,6 +35,7 @@ private:
     QSqlDatabase *dbSQL;
     QMap<QString, bool> *map;
     bool showDBTree;
+    QFont *font;
 private:
     void initializeUI();
     void initializeMap();
@@ -40,6 +43,10 @@ private:
     void Connect_Signal_Slot();
 private slots:
     void showMovie();
+    void addMovie();
+    void removeMovie();
+    void modifyMovie();
+
     void showLabel();
     void showMovieLabel();
     void showTimeLine();

@@ -32,6 +32,7 @@ AdminMainWindow::~AdminMainWindow()
 
 void AdminMainWindow::initializeUI()
 {
+    font  = new QFont("Microsoft YaHei",20);
     ui->btnSearch->setText(SEARCH);
 }
 
@@ -57,7 +58,10 @@ void AdminMainWindow::Connect_Signal_Slot()
     connect(ui->actReConnectDB, SIGNAL(triggered()), this, SLOT(reconnectDB()));
     
     connect(ui->actShowMovie, SIGNAL(triggered()), this, SLOT(showMovie()));
-    
+    connect(ui->actAddMoive,SIGNAL(triggered()),this,SLOT(addMovie()));
+    connect(ui->actRemoveMovie,SIGNAL(triggered()),this,SLOT(removeMovie()));
+    connect(ui->actModifyMovie,SIGNAL(triggered()),this,SLOT(modifyMovie()));
+
     connect(ui->actShowLabel, SIGNAL(triggered()), this, SLOT(showLabel()));
     connect(ui->actShowMovieLabel, SIGNAL(triggered()), this, SLOT(showMovieLabel()));
     
@@ -161,6 +165,33 @@ void AdminMainWindow::showMovie()
     openOneTable("movie");
 }
 
+void AdminMainWindow::addMovie(){
+    if(dbSQL == nullptr){
+        QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
+        return;
+    }
+
+    dlgAddMovie *addMovie = new dlgAddMovie();
+    if(addMovie->exec() == QDialog::Accepted){
+        qDebug()<<"dhsgf"<<endl;
+        QString *movie = addMovie->getMovie();
+        for (size_t i=0;i<4;++i) {
+            qDebug()<<movie[i]<<endl;
+        }
+    }
+
+
+
+}
+
+void AdminMainWindow::removeMovie(){
+
+}
+
+void AdminMainWindow::modifyMovie(){
+
+}
+
 void AdminMainWindow::showLabel()
 {
     openOneTable("label");
@@ -210,3 +241,5 @@ void AdminMainWindow::saveHistory()
 {
     // 保存到文件
 }
+
+
