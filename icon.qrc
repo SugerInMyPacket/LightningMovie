@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/">
+        <file>IconResource/connect.png</file>
+        <file>IconResource/lightning.png</file>
+        <file>IconResource/search.png</file>
+        <file>IconResource/table.png</file>
+        <file>IconResource/movie.png</file>
+        <file>IconResource/label.png</file>
+        <file>IconResource/hall.png</file>
+        <file>IconResource/clear.png</file>
+        <file>IconResource/save.png</file>
+        <file>IconResource/add.png</file>
+        <file>IconResource/delete.png</file>
+        <file>IconResource/modify.png</file>
+        <file>IconResource/update.png</file>
+        <file>IconResource/time.png</file>
+        <file>IconResource/state.png</file>
+        <file>IconResource/stage.png</file>
+        <file>IconResource/ticket.png</file>
+    </qresource>
+</RCC>

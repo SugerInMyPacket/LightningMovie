@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DlgRegister</class>
+ <widget class="QDialog" name="DlgRegister">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>733</width>
+    <height>690</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Microsoft YaHei UI</family>
+    <pointsize>18</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QLabel" name="labBak">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>731</width>
+     <height>641</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="bkgresource.qrc">:/BkgResource/bkg_register.jpg</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>100</y>
+     <width>601</width>
+     <height>476</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="8,1">
+    <item>
+     <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0,0" columnstretch="3,6,1">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetNoConstraint</enum>
+      </property>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="edtPswdConf">
+        <property name="styleSheet">
+         <string notr="true">QLineEdit{color:white}
+QLineEdit:hover{color:balck}
+QLineEdit{background-color:rgba(55,198,192,90)}
+QLineEdit{border:2px}
+QLineEdit{border-radius:10px}
+QLineEdit{padding:2px 4px}</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QLineEdit" name="edtMaiVerCode">
+        <property name="styleSheet">
+         <string notr="true">QLineEdit{color:white}
+QLineEdit:hover{color:balck}
+QLineEdit{background-color:rgba(254,227,106,90)}
+QLineEdit{border:2px}
+QLineEdit{border-radius:10px}
+QLineEdit{padding:2px 4px}</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="edtUser">
+        <property name="styleSheet">
+         <string notr="true">QLineEdit{color:white}
+QLineEdit:hover{color:balck}
+QLineEdit{background-color:rgba(55,198,192,90)}
+QLineEdit{border:2px}
+QLineEdit{border-radius:10px}
+QLineEdit{padding:2px 4px}</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="labPswdConf">
+        <property name="styleSheet">
+         <string notr="true">QLabel{color:white}
+QLabel{padding:2px 4px}</string>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>edtPswdConf</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="edtPhone">
+        <property name="styleSheet">
+         <string notr="true">QLineEdit{color:white}
+QLineEdit:hover{color:balck}
+QLineEdit{background-color:rgba(233,174,106,90)}
+QLineEdit{border:2px}
+QLineEdit{border-radius:10px}
+QLineEdit{padding:2px 4px}</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="labUser">
+        <property name="styleSheet">
+         <string notr="true">QLabel{color:white}
+QLabel{padding:2px 4px}</string>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>edtUser</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="labMail">
+        <property name="styleSheet">
+         <string notr="true">QLabel{color:white}
+QLabel{padding:2px 4px}</string>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>edtMail</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="labIdentity">
+        <property name="styleSheet">
+         <string notr="true">QLabel{color:white}
+QLabel{padding:2px 4px}</string>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>cmbIdentity</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="labPhVerCode">
+        <property name="styleSheet">
+         <string notr="true">QLabel{color:white}
+QLabel{padding:2px 4px}</string>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>edtPhVerCode</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="labPhone">
+        <property name="styleSheet">
+         <string notr="true">QLabel{color:white}
+QLabel{padding:2px 4px}</string>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>edtPhone</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="labPswd">
+        <property name="styleSheet">
+         <string notr="true">QLabel{color:white}
+QLabel{padding:2px 4px}</string>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>edtPswd</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="edtPhVerCode">
+        <property name="styleSheet">
+         <string notr="true">QLineEdit{color:white}
+QLineEdit:hover{color:balck}
+QLineEdit{background-color:rgba(254,227,106,90)}
+QLineEdit{border:2px}
+QLineEdit{border-radius:10px}
+QLineEdit{padding:2px 4px}</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="edtPswd">
+        <property name="styleSheet">
+         <string notr="true">QLineEdit{color:white}
+QLineEdit:hover{color:balck}
+QLineEdit{background-color:rgba(55,198,192,90)}
+QLineEdit{border:2px}
+QLineEdit{border-radius:10px}
+QLineEdit{padding:2px 4px}</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QLineEdit" name="edtMail">
+        <property name="styleSheet">
+         <string notr="true">QLineEdit{color:white}
+QLineEdit:hover{color:balck}
+QLineEdit{background-color:rgba(254,227,106,90)}
+QLineEdit{border:2px}
+QLineEdit{border-radius:10px}
+QLineEdit{padding:2px 4px}</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="labMaiVerCode">
+        <property name="styleSheet">
+         <string notr="true">QLabel{color:white}
+QLabel{padding:2px 4px}</string>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>edtMaiVerCode</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="QPushButton" name="btnSendPhVer">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton{color:white}
+QPushButton:hover{color:red}
+QPushButton{background-color:rgba(221, 195, 47,75)}
+QPushButton{border:2px}
+QPushButton{border-radius:10px}
+QPushButton{padding:2px 4px}
+QPushButton{opacity:0.5}</string>
+        </property>
+        <property name="text">
+         <string>PushButton</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="2">
+       <widget class="QPushButton" name="btnSendMaVer">
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton{color:white}
+QPushButton:hover{color:red}
+QPushButton{background-color:rgba(221, 195, 47,75)}
+QPushButton{border:2px}
+QPushButton{border-radius:10px}
+QPushButton{padding:2px 4px}
+QPushButton{opacity:0.5}</string>
+        </property>
+        <property name="text">
+         <string>PushButton</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1">
+       <widget class="QComboBox" name="cmbIdentity">
+        <property name="styleSheet">
+         <string notr="true">QComboBox{color:white}
+QComboBox:hover{color:balck}
+QComboBox{background-color:rgba(254,227,106,90)}
+QComboBox{border:2px}
+QComboBox{border-radius:10px}
+QComboBox{padding:2px 4px}</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="btnQuit">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton{color:white}
+QPushButton:hover{color:red}
+QPushButton{background-color:rgba(221, 195, 47,75)}
+QPushButton{border:2px}
+QPushButton{border-radius:10px}
+QPushButton{padding:2px 4px}
+QPushButton{opacity:0.5}</string>
+        </property>
+        <property name="text">
+         <string>PushButton</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnSubmit">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton{color:white}
+QPushButton:hover{color:red}
+QPushButton{background-color:rgba(221, 195, 47,75)}
+QPushButton{border:2px}
+QPushButton{border-radius:10px}
+QPushButton{padding:2px 4px}
+QPushButton{opacity:0.5}</string>
+        </property>
+        <property name="text">
+         <string>PushButton</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnCancel">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton{color:white}
+QPushButton:hover{color:red}
+QPushButton{background-color:rgba(221, 195, 47,75)}
+QPushButton{border:2px}
+QPushButton{border-radius:10px}
+QPushButton{padding:2px 4px}
+QPushButton{opacity:0.5}</string>
+        </property>
+        <property name="text">
+         <string>PushButton</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>edtUser</tabstop>
+  <tabstop>edtPswd</tabstop>
+  <tabstop>edtPswdConf</tabstop>
+  <tabstop>edtPhone</tabstop>
+  <tabstop>edtPhVerCode</tabstop>
+  <tabstop>edtMail</tabstop>
+  <tabstop>edtMaiVerCode</tabstop>
+ </tabstops>
+ <resources>
+  <include location="bkgresource.qrc"/>
+ </resources>
+ <connections/>
+</ui>

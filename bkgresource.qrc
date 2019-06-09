@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>BkgResource/bkg_login.jpg</file>
+        <file>BkgResource/bkg_register.jpg</file>
+        <file>BkgResource/AdmWelcome.png</file>
+    </qresource>
+</RCC>

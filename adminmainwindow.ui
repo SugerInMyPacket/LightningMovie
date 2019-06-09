@@ -1,0 +1,586 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AdminMainWindow</class>
+ <widget class="QMainWindow" name="AdminMainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>856</width>
+    <height>573</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Microsoft YaHei UI</family>
+    <pointsize>18</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>AdminMainWindow</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="icon.qrc">
+    <normaloff>:/IconResource/lightning.png</normaloff>:/IconResource/lightning.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <widget class="QWidget" name="gridLayoutWidget">
+       <layout class="QGridLayout" name="displayLayout">
+        <item row="0" column="0">
+         <widget class="QLineEdit" name="ledtDirectory">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QPushButton" name="btnSearch">
+          <property name="text">
+           <string>PushButton</string>
+          </property>
+          <property name="icon">
+           <iconset resource="icon.qrc">
+            <normaloff>:/IconResource/search.png</normaloff>:/IconResource/search.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="2">
+         <widget class="QTabWidget" name="tables">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="tabShape">
+           <enum>QTabWidget::Triangular</enum>
+          </property>
+          <property name="currentIndex">
+           <number>-1</number>
+          </property>
+          <property name="movable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QPlainTextEdit" name="stateArea">
+       <property name="minimumSize">
+        <size>
+         <width>150</width>
+         <height>300</height>
+        </size>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>856</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="muMovie">
+    <property name="title">
+     <string>电影</string>
+    </property>
+    <addaction name="actShowMovie"/>
+    <addaction name="actModifyMovie"/>
+    <addaction name="actAddMoive"/>
+    <addaction name="actDeleteMovie"/>
+   </widget>
+   <widget class="QMenu" name="muTicket">
+    <property name="title">
+     <string>电影票</string>
+    </property>
+    <addaction name="actShowTicket"/>
+    <addaction name="actModifyTicket"/>
+    <addaction name="actAddTicket"/>
+    <addaction name="actRemoveTicket"/>
+   </widget>
+   <widget class="QMenu" name="muHall">
+    <property name="title">
+     <string>放映厅</string>
+    </property>
+    <addaction name="actShowHall"/>
+    <addaction name="actNewHall"/>
+    <addaction name="actRemoveHall"/>
+    <addaction name="actRepairHall"/>
+   </widget>
+   <widget class="QMenu" name="muInfo">
+    <property name="title">
+     <string>个人信息</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>场次</string>
+    </property>
+    <addaction name="actShowStage"/>
+    <addaction name="actModifyStage"/>
+    <addaction name="actAddStage"/>
+    <addaction name="actRemoveStage"/>
+   </widget>
+   <widget class="QMenu" name="muTool">
+    <property name="title">
+     <string>工具</string>
+    </property>
+    <addaction name="actReConnectDB"/>
+    <addaction name="actUpdate"/>
+    <addaction name="separator"/>
+    <addaction name="actClearHistory"/>
+    <addaction name="actSaveHistory"/>
+   </widget>
+   <widget class="QMenu" name="muLabel">
+    <property name="title">
+     <string>标签</string>
+    </property>
+    <addaction name="actShowMovieLabel"/>
+    <addaction name="actAddMovieLabel"/>
+    <addaction name="actRemoveMovieLabel"/>
+    <addaction name="separator"/>
+    <addaction name="actShowLabel"/>
+    <addaction name="actAddLabel"/>
+    <addaction name="actRemoveLabel"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>时间安排</string>
+    </property>
+    <addaction name="actShowTime"/>
+    <addaction name="actModifyTime"/>
+    <addaction name="actAddTime"/>
+    <addaction name="actRemoveTime"/>
+   </widget>
+   <widget class="QMenu" name="muState">
+    <property name="title">
+     <string>状态管理</string>
+    </property>
+    <addaction name="actShowPlayState"/>
+    <addaction name="actAddPlayState"/>
+    <addaction name="actRemoveState"/>
+    <addaction name="separator"/>
+    <addaction name="actShowSellState"/>
+    <addaction name="actAddSellState"/>
+    <addaction name="actRemoveSellState"/>
+   </widget>
+   <addaction name="muMovie"/>
+   <addaction name="muState"/>
+   <addaction name="muLabel"/>
+   <addaction name="muHall"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu"/>
+   <addaction name="muTicket"/>
+   <addaction name="muInfo"/>
+   <addaction name="muTool"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actShowMovie"/>
+   <addaction name="actShowMovieLabel"/>
+   <addaction name="actShowHall"/>
+   <addaction name="actShowTime"/>
+   <addaction name="actShowPlayState"/>
+   <addaction name="actShowStage"/>
+   <addaction name="actShowTicket"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>40</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QToolBar" name="tbVertical">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>LeftToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actReConnectDB"/>
+   <addaction name="actUpdate"/>
+   <addaction name="actClearHistory"/>
+   <addaction name="actSaveHistory"/>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <action name="actReConnectDB">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/connect.png</normaloff>:/IconResource/connect.png</iconset>
+   </property>
+   <property name="text">
+    <string>connect</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+C</string>
+   </property>
+  </action>
+  <action name="actShowMovie">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/movie.png</normaloff>:/IconResource/movie.png</iconset>
+   </property>
+   <property name="text">
+    <string>showMovie</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+M</string>
+   </property>
+  </action>
+  <action name="actShowMovieLabel">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/label.png</normaloff>:/IconResource/label.png</iconset>
+   </property>
+   <property name="text">
+    <string>showMovieLabel</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+L</string>
+   </property>
+  </action>
+  <action name="actShowHall">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/hall.png</normaloff>:/IconResource/hall.png</iconset>
+   </property>
+   <property name="text">
+    <string>showHall</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+H</string>
+   </property>
+  </action>
+  <action name="actClearHistory">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/clear.png</normaloff>:/IconResource/clear.png</iconset>
+   </property>
+   <property name="text">
+    <string>clearHistory</string>
+   </property>
+  </action>
+  <action name="actSaveHistory">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/save.png</normaloff>:/IconResource/save.png</iconset>
+   </property>
+   <property name="text">
+    <string>saveHistory</string>
+   </property>
+  </action>
+  <action name="actAddMoive">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/add.png</normaloff>:/IconResource/add.png</iconset>
+   </property>
+   <property name="text">
+    <string>addMoive</string>
+   </property>
+  </action>
+  <action name="actDeleteMovie">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/delete.png</normaloff>:/IconResource/delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>deleteMovie</string>
+   </property>
+  </action>
+  <action name="actModifyMovie">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/modify.png</normaloff>:/IconResource/modify.png</iconset>
+   </property>
+   <property name="text">
+    <string>modifyMovie</string>
+   </property>
+  </action>
+  <action name="actUpdate">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/update.png</normaloff>:/IconResource/update.png</iconset>
+   </property>
+   <property name="text">
+    <string>update</string>
+   </property>
+  </action>
+  <action name="actNewHall">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/add.png</normaloff>:/IconResource/add.png</iconset>
+   </property>
+   <property name="text">
+    <string>newHall</string>
+   </property>
+  </action>
+  <action name="actRemoveHall">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/delete.png</normaloff>:/IconResource/delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>removeHall</string>
+   </property>
+  </action>
+  <action name="actRepairHall">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/modify.png</normaloff>:/IconResource/modify.png</iconset>
+   </property>
+   <property name="text">
+    <string>repairHall</string>
+   </property>
+  </action>
+  <action name="actAddMovieLabel">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/add.png</normaloff>:/IconResource/add.png</iconset>
+   </property>
+   <property name="text">
+    <string>addMovieLabel</string>
+   </property>
+  </action>
+  <action name="actRemoveMovieLabel">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/delete.png</normaloff>:/IconResource/delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>removeMovieLabel</string>
+   </property>
+  </action>
+  <action name="actShowLabel">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/label.png</normaloff>:/IconResource/label.png</iconset>
+   </property>
+   <property name="text">
+    <string>showLabel</string>
+   </property>
+  </action>
+  <action name="actAddLabel">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/add.png</normaloff>:/IconResource/add.png</iconset>
+   </property>
+   <property name="text">
+    <string>addLabel</string>
+   </property>
+  </action>
+  <action name="actRemoveLabel">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/delete.png</normaloff>:/IconResource/delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>removeLabel</string>
+   </property>
+  </action>
+  <action name="actShowTime">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/time.png</normaloff>:/IconResource/time.png</iconset>
+   </property>
+   <property name="text">
+    <string>showTime</string>
+   </property>
+  </action>
+  <action name="actModifyTime">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/modify.png</normaloff>:/IconResource/modify.png</iconset>
+   </property>
+   <property name="text">
+    <string>modifyTime</string>
+   </property>
+  </action>
+  <action name="actAddTime">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/add.png</normaloff>:/IconResource/add.png</iconset>
+   </property>
+   <property name="text">
+    <string>addTime</string>
+   </property>
+  </action>
+  <action name="actRemoveTime">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/delete.png</normaloff>:/IconResource/delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>removeTime</string>
+   </property>
+  </action>
+  <action name="actShowPlayState">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/state.png</normaloff>:/IconResource/state.png</iconset>
+   </property>
+   <property name="text">
+    <string>showPlayState</string>
+   </property>
+  </action>
+  <action name="actAddPlayState">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/add.png</normaloff>:/IconResource/add.png</iconset>
+   </property>
+   <property name="text">
+    <string>addPlayState</string>
+   </property>
+  </action>
+  <action name="actRemoveState">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/delete.png</normaloff>:/IconResource/delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>removeState</string>
+   </property>
+  </action>
+  <action name="actShowSellState">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/state.png</normaloff>:/IconResource/state.png</iconset>
+   </property>
+   <property name="text">
+    <string>showSellState</string>
+   </property>
+  </action>
+  <action name="actAddSellState">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/add.png</normaloff>:/IconResource/add.png</iconset>
+   </property>
+   <property name="text">
+    <string>addSellState</string>
+   </property>
+   <property name="toolTip">
+    <string>addSellState</string>
+   </property>
+  </action>
+  <action name="actRemoveSellState">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/delete.png</normaloff>:/IconResource/delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>removeSellState</string>
+   </property>
+   <property name="toolTip">
+    <string>removeSellState</string>
+   </property>
+  </action>
+  <action name="actShowStage">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/stage.png</normaloff>:/IconResource/stage.png</iconset>
+   </property>
+   <property name="text">
+    <string>showStage</string>
+   </property>
+  </action>
+  <action name="actModifyStage">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/modify.png</normaloff>:/IconResource/modify.png</iconset>
+   </property>
+   <property name="text">
+    <string>modifyStage</string>
+   </property>
+  </action>
+  <action name="actAddStage">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/add.png</normaloff>:/IconResource/add.png</iconset>
+   </property>
+   <property name="text">
+    <string>addStage</string>
+   </property>
+  </action>
+  <action name="actRemoveStage">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/delete.png</normaloff>:/IconResource/delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>removeStage</string>
+   </property>
+  </action>
+  <action name="actShowTicket">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/ticket.png</normaloff>:/IconResource/ticket.png</iconset>
+   </property>
+   <property name="text">
+    <string>showTicket</string>
+   </property>
+  </action>
+  <action name="actModifyTicket">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/modify.png</normaloff>:/IconResource/modify.png</iconset>
+   </property>
+   <property name="text">
+    <string>modifyTicket</string>
+   </property>
+  </action>
+  <action name="actAddTicket">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/add.png</normaloff>:/IconResource/add.png</iconset>
+   </property>
+   <property name="text">
+    <string>addTicket</string>
+   </property>
+  </action>
+  <action name="actRemoveTicket">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/delete.png</normaloff>:/IconResource/delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>removeTicket</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="icon.qrc"/>
+ </resources>
+ <connections/>
+</ui>
