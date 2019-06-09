@@ -1,6 +1,2 @@
-<<<<<<< HEAD
-LightningMovie
-=======
-# LightningMovie
 
->>>>>>> Initial commit
+LightningMovie
