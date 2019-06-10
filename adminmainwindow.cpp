@@ -556,6 +556,17 @@ void AdminMainWindow::showTimeLine()
     openOneTable("timeline");
 }
 
+void AdminMainWindow::addTimeLine(){
+
+}
+
+void AdminMainWindow::removeTimeLine(){
+
+}
+void AdminMainWindow::modifyTimeLine(){
+
+}
+
 void AdminMainWindow::showPlayState()
 {
     openOneTable("playstate");
@@ -600,15 +611,6 @@ void AdminMainWindow::removePlayState(){
 
 }
 
-void AdminMainWindow::addTimeLine(){
-
-}
-void AdminMainWindow::removeTimeLine(){
-
-}
-void AdminMainWindow::modifyTimeLine(){
-
-}
 
 void AdminMainWindow::showTicket()
 {
