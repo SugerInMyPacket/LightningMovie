@@ -285,7 +285,7 @@ void AdminMainWindow::addLabel(){
 
     QLabel *labLabelId=new QLabel(LABEL_ID);    //char(15)
     QLineEdit *edtLabelId=new QLineEdit();
-    QLabel *labLabelDsb=new QLabel(LABEL_Dsb);  //nvarchar(100)
+    QLabel *labLabelDsb=new QLabel(LABEL_DSB);  //nvarchar(100)
     QLineEdit *edtLabelDsb=new QLineEdit();
     dlgData->setFont(*font);
     QGridLayout *grid = new QGridLayout();
@@ -405,6 +405,7 @@ void AdminMainWindow::showPlayState()
 {
     openOneTable("playstate");
 }
+
 void AdminMainWindow::addPlayState(){
 
 }
