@@ -22,3 +22,33 @@ insert into hall values (8,'春宵幽梦楼',100,100);
 select * from hall;
 
 
+delimiter //
+create procedure addHall(
+	in in_hallId int unsigned,
+	in in_hallName nvarchar(100),
+	in in_hallColumns int unsigned,
+	in in_hallRow int unsigned)
+begin
+	insert into hall values(in_hallId,in_hallName,in_hallColumns,in_hallRow);
+end//
+delimiter ;
+
+
+delimiter //
+create procedure removeHall(
+	in del_hallId int unsigned)
+begin
+	delete from hall where hallId=del_hallId;
+end//
+delimiter ;
+
+
+delimiter //
+create procedure modifyHall(
+	in mHallId int unsigned,
+	in newHallName nvarchar(100))
+begin 
+	update hall set hallName=newHallName
+	where hallId=mHallId;
+end//
+delimiter ;
