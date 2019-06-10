@@ -275,9 +275,9 @@ void AdminMainWindow::addHall(){
     dlgData->setLayout(grid);
     if(dlgData->exec()==QDialog::Accepted){
         QString strHall = edtHallId->text();
-
+        
         QSqlQuery query(*dbSQL);
-        QString sql = "call addMovie(" + strMovie+");";
+        QString sql = "";
         if(!query.exec(sql)){
             QString error = "errorCode: " + query.lastError().nativeErrorCode();
             error += ("\nerrorMessage: " + query.lastError().text());

@@ -66,5 +66,9 @@ const QString SEARCH =  "查找";
 const QString MOVIE_DIRECTOR = "电影导演";
 const QString MOVIE_STAR = "电影主演";
 const QString MOVIE_NAME = "电影名称";
+const QString HALL_ID = "放映厅编号";
+const QString HALL_NAME = "放映厅名称";
+const QString HALL_ROW = "放映厅排数";
+const QString HALL_COLUMN = "放映厅列数";
 
 #endif // STRINGSOURCE_H

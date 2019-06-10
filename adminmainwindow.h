@@ -17,7 +17,6 @@
 #include <qdatetime.h>
 #include "dbconnector.h"
 #include "stringsource.h"
-#include "dlgaddmovie.h"
 
 
 namespace Ui {
@@ -50,7 +49,12 @@ private slots:
     void showLabel();
     void showMovieLabel();
     void showTimeLine();
+
     void showHall();
+    void addHall();
+    void removeHall();
+    void modifyHall();
+
     void showPlayState();
     void showTicket();
     void showTicketState();
