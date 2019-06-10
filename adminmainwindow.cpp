@@ -275,7 +275,43 @@ void AdminMainWindow::showLabel()
 }
 
 void AdminMainWindow::addLabel(){
+    if(dbSQL == nullptr){
+            QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
+            return;
+    }
+    QDialog *dlgData = new QDialog(this);
+    QPushButton *btnOkay = new QPushButton(BTN_OKAY);
+    connect(btnOkay, SIGNAL(clicked()), dlgData, SLOT(accept()));
 
+    QLabel *labLabelId=new QLabel(LABEL_ID);    //char(15)
+    QLineEdit *edtLabelId=new QLineEdit();
+    QLabel *labLabelDsb=new QLabel(LABEL_Dsb);  //nvarchar(100)
+    QLineEdit *edtLabelDsb=new QLineEdit();
+    dlgData->setFont(*font);
+    QGridLayout *grid = new QGridLayout();
+    grid->addWidget(labLabelId,0,0,1,1);
+    grid->addWidget(edtLabelId,0,1,1,2);
+    grid->addWidget(labLabelDsb,1,0,1,1);
+    grid->addWidget(edtLabelDsb,1,1,1,2);
+    grid->addWidget(btnOkay,2,1,1,1);
+    dlgData->setLayout(grid);
+    if(dlgData->exec()==QDialog::Accepted){
+        QString strLabel="'"+edtLabelId->text();
+        strLabel+="','"+edtLabelDsb->text()+"'";
+        QSqlQuery query(*dbSQL);
+        dbSQL->transaction(); // 开启一个事务
+        QString sql = "call addLabel(" + strLabel+");";
+
+        query.prepare(sql); // 防止注入sql攻击
+        if(query.exec() && query.lastError().type() == QSqlError::NoError){
+            dbSQL->commit();  //成功则提交
+        }else {
+            dbSQL->rollback();  //失败则回滚
+            QString error = "errorCode: " + query.lastError().nativeErrorCode();
+            error += ("\nerrorMessage: " + query.lastError().text());
+            QMessageBox::critical(this, ERR_DB_QUERY, error);
+        }
+    }
 }
 
 void AdminMainWindow::removeLabel(){
@@ -303,7 +339,7 @@ void AdminMainWindow::showHall()
 }
 
 void AdminMainWindow::addHall(){
-    if(dbSQL == nullptr){
+   if(dbSQL == nullptr){
         QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
         return;
     }
@@ -331,18 +367,23 @@ void AdminMainWindow::addHall(){
     grid->addWidget(btnOkay,4,1,1,1);
     dlgData->setLayout(grid);
     if(dlgData->exec()==QDialog::Accepted){
-        QString hall = "";
-        QSqlQuery query(*dbSQL);
-        dbSQL->transaction(); // 开启一个事务
-        QString sql = "";
-        query.prepare(sql); // 防止注入sql攻击
-        if(query.exec() && query.lastError().type() == QSqlError::NoError){
-            dbSQL->commit();  //成功则提交
-        }else {
-            dbSQL->rollback();  //失败则回滚
-            QString error = "errorCode: " + query.lastError().nativeErrorCode();
-            error += ("\nerrorMessage: " + query.lastError().text());
-            QMessageBox::critical(this, ERR_DB_QUERY, error);
+//        QString strHall = edtHallId->text();
+        QString strHall= edtHallId->text();
+        strHall+=",'"+edtHallName->text();
+        strHall+="',"+edtHallColumn->text();
+        strHall+=","+edtHallRow->text();
+         QSqlQuery query(*dbSQL);
+         dbSQL->transaction();   // 开启一个事务
+         QString sql = "call addHall("+strHall+");";
+         qDebug()<<sql;
+         query.prepare(sql); // 防止注入sql攻击
+         if(query.exec() && query.lastError().type() == QSqlError::NoError){
+                    dbSQL->commit();  //成功则提交
+          }else {
+               dbSQL->rollback();  //失败则回滚
+               QString error = "errorCode: " + query.lastError().nativeErrorCode();
+               error += ("\nerrorMessage: " + query.lastError().text());
+               QMessageBox::critical(this, ERR_DB_QUERY, error);
         }
     }
 }
