@@ -52,3 +52,4 @@ begin
 	where hallId=mHallId;
 end//
 delimiter ;
+

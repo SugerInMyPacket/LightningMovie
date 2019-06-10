@@ -274,16 +274,19 @@ void AdminMainWindow::addHall(){
     grid->addWidget(btnOkay,4,1,1,1);
     dlgData->setLayout(grid);
     if(dlgData->exec()==QDialog::Accepted){
-        QString strHall = edtHallId->text();
-
+        QString hall = "";
         QSqlQuery query(*dbSQL);
-        QString sql = "call addMovie(" + strMovie+");";
-        if(!query.exec(sql)){
+        dbSQL->transaction(); // 开启一个事务
+        QString sql = "";
+        query.prepare(sql); // 防止注入sql攻击
+        if(query.exec() && query.lastError().type() == QSqlError::NoError){
+            dbSQL->commit();  //成功则提交
+        }else {
+            dbSQL->rollback();  //失败则回滚
             QString error = "errorCode: " + query.lastError().nativeErrorCode();
             error += ("\nerrorMessage: " + query.lastError().text());
             QMessageBox::critical(this, ERR_DB_QUERY, error);
         }
-        qDebug()<<"ok";
     }
 }
 
