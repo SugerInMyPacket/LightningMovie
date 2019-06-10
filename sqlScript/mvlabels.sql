@@ -40,6 +40,9 @@ create procedure removeMovieLabel(
 	in mName nvarchar(100),
 	in lid nvarchar(15))
 begin
+	declare mid char(15);
+	select movieId into mid
+	from movie where movieName = mName;
 	delete from movieLabel 
 	where movId = mid and labId = lid;
 end

@@ -418,7 +418,40 @@ void AdminMainWindow::addMovieLabel(){
 
 
 void AdminMainWindow::removeMovieLabel(){
-
+    if(dbSQL == nullptr){
+        QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
+        return;
+    }
+    QDialog *dlgData = new QDialog(this);
+    QPushButton *btnRemove = new QPushButton(BTN_OKAY);
+    connect(btnRemove,SIGNAL(clicked()),dlgData,SLOT(accept()));
+    QLabel *labMovieName = new QLabel(MOVIE_NAME);
+    QLineEdit *edtMovieName = new QLineEdit();
+    QLabel *labLabelId = new QLabel(LABEL_ID);
+    QLineEdit *edtLabelId = new QLineEdit();
+    QGridLayout *grid = new QGridLayout();
+    dlgData->setFont(*font);
+    grid->addWidget(labMovieName,0,0,1,1);
+    grid->addWidget(edtMovieName,0,1,1,2);
+    grid->addWidget(labLabelId,1,0,1,1);
+    grid->addWidget(edtLabelId,1,1,1,2);
+    grid->addWidget(btnRemove,2,1,1,1);
+    dlgData->setLayout(grid);
+    if(dlgData->exec() == QDialog::Accepted){
+        QString labels = edtMovieName->text()+ "','"+ edtLabelId->text();
+        QString sql = "call removeMovieLabel('"+labels+"');";
+        dbSQL->transaction();
+        QSqlQuery query(*dbSQL);
+        query.prepare(sql);
+        if(query.exec() && query.lastError().type() == QSqlError::NoError){
+            dbSQL->commit();  //成功则提交
+        }else {
+            dbSQL->rollback();  //失败则回滚
+            QString error = "errorCode: " + query.lastError().nativeErrorCode();
+            error += ("\nerrorMessage: " + query.lastError().text());
+            QMessageBox::critical(this, ERR_DB_QUERY, error);
+        }
+    }
 }
 
 void AdminMainWindow::showHall()
@@ -477,7 +510,36 @@ void AdminMainWindow::addHall(){
 }
 
 void AdminMainWindow::removeHall(){
-
+    if(dbSQL == nullptr){
+        QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
+        return;
+    }
+    QDialog *dlgData = new QDialog(this);
+    QPushButton *btnRemove = new QPushButton(BTN_OKAY);
+    connect(btnRemove,SIGNAL(clicked()),dlgData,SLOT(accept()));
+    QLabel *labHallId = new QLabel(HALL_ID);
+    QLineEdit *edtHallId = new QLineEdit();
+    QGridLayout *grid = new QGridLayout();
+    dlgData->setFont(*font);
+    grid->addWidget(labHallId,0,0,1,1);
+    grid->addWidget(edtHallId,0,1,1,2);
+    grid->addWidget(btnRemove,1,1,1,1);
+    dlgData->setLayout(grid);
+    if(dlgData->exec() == QDialog::Accepted){
+        QString labels = edtHallId->text();
+        QString sql = "call removeHall("+labels+");";
+        dbSQL->transaction();
+        QSqlQuery query(*dbSQL);
+        query.prepare(sql);
+        if(query.exec() && query.lastError().type() == QSqlError::NoError){
+            dbSQL->commit();  //成功则提交
+        }else {
+            dbSQL->rollback();  //失败则回滚
+            QString error = "errorCode: " + query.lastError().nativeErrorCode();
+            error += ("\nerrorMessage: " + query.lastError().text());
+            QMessageBox::critical(this, ERR_DB_QUERY, error);
+        }
+    }
 }
 
 void AdminMainWindow::modifyHall(){
@@ -499,7 +561,38 @@ void AdminMainWindow::addPlayState(){
 }
 
 void AdminMainWindow::removePlayState(){
-
+    if(dbSQL == nullptr){
+        QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
+        return;
+    }
+    QDialog *dlgData = new QDialog(this);
+    QPushButton *btnRemove = new QPushButton(BTN_OKAY);
+    connect(btnRemove,SIGNAL(clicked()),dlgData,SLOT(accept()));
+    QLabel *labStateId = new QLabel(PLAYSTATE_ID);
+    QLineEdit *edtStateId = new QLineEdit();
+    QGridLayout *grid = new QGridLayout();
+    dlgData->setFont(*font);
+    grid->addWidget(labStateId,0,0,1,1);
+    grid->addWidget(edtStateId,0,1,1,2);
+    grid->addWidget(btnRemove,1,1,1,1);
+    dlgData->setLayout(grid);
+    if(dlgData->exec() == QDialog::Accepted){
+        QString state = edtStateId->text();
+        state = state.remove(2,state.length()-2);
+        qDebug()<<state;
+        QString sql = "call removePlayState('"+state+"');";
+        dbSQL->transaction();
+        QSqlQuery query(*dbSQL);
+        query.prepare(sql);
+        if(query.exec() && query.lastError().type() == QSqlError::NoError){
+            dbSQL->commit();  //成功则提交
+        }else {
+            dbSQL->rollback();  //失败则回滚
+            QString error = "errorCode: " + query.lastError().nativeErrorCode();
+            error += ("\nerrorMessage: " + query.lastError().text());
+            QMessageBox::critical(this, ERR_DB_QUERY, error);
+        }
+    }
 
 }
 

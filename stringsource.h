@@ -72,5 +72,6 @@ const QString HALL_ROW = "放映厅排数";
 const QString HALL_COLUMN = "放映厅列数";
 const QString LABEL_ID="标签名称";
 const QString LABEL_DSB ="标签描述";
+const QString PLAYSTATE_ID = "播放状态";
 
 #endif // STRINGSOURCE_H
