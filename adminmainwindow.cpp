@@ -321,7 +321,7 @@ void AdminMainWindow::showMovieLabel()
 
 
 void AdminMainWindow::addMovieLabel(){
-    if(dbSQL == nullptr){
+ if(dbSQL == nullptr){
           QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
           return;
       }
