@@ -33,8 +33,7 @@ SOURCES += \
     dlgregister.cpp \
     dlgfindpswd.cpp \
     qpswdvalidator.cpp \
-    dbconnector.cpp \
-    dlgaddmovie.cpp
+    dbconnector.cpp
 
 HEADERS += \
         adminmainwindow.h \
@@ -46,8 +45,7 @@ HEADERS += \
     dlgfindpswd.h \
     qpswdvalidator.h \
     dbconnector.h \
-    tablestate.h \
-    dlgaddmovie.h
+    tablestate.h
 
 FORMS += \
         adminmainwindow.ui \
@@ -55,8 +53,7 @@ FORMS += \
     cdtormainwindow.ui \
     dlgsettings.ui \
     dlgregister.ui \
-    dlgfindpswd.ui \
-    dlgaddmovie.ui
+    dlgfindpswd.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

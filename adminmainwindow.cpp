@@ -170,17 +170,48 @@ void AdminMainWindow::addMovie(){
         QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
         return;
     }
-
-    QString movie;
-    dlgAddMovie *addMovie = new dlgAddMovie();
-    if(addMovie->exec() == QDialog::Accepted){
-        movie = addMovie->getMovie();
-        qDebug()<<movie<<endl;
+    QDialog *dlgData = new QDialog(this);
+    QPushButton *btnOkay = new QPushButton(BTN_OKAY);
+    connect(btnOkay, SIGNAL(clicked()), dlgData, SLOT(accept()));
+    QLabel *labMovieName = new QLabel(MOVIE_NAME);
+    QLineEdit *edtMovieName = new QLineEdit();
+    QLabel *labDirector = new QLabel(MOVIE_DIRECTOR);
+    QLineEdit *edtDirector = new QLineEdit();
+    QLabel *labStar = new QLabel(MOVIE_STAR);
+    QLineEdit *edtStar = new QLineEdit();
+    QGridLayout *grid = new QGridLayout();
+    dlgData->setFont(*font);
+    grid->addWidget(labMovieName,0,0,1,1);
+    grid->addWidget(edtMovieName,0,1,1,2);
+    grid->addWidget(labDirector,1,0,1,2);
+    grid->addWidget(edtDirector,1,1,1,2);
+    grid->addWidget(labStar,2,0,1,2);
+    grid->addWidget(edtStar,2,1,1,2);
+    grid->addWidget(btnOkay,3,1,1,1);
+    dlgData->setLayout(grid);
+    if(dlgData->exec()==QDialog::Accepted){
+        srand(static_cast<unsigned>(time(nullptr)));
+        char id[16];
+        id[0] = rand()%26 + 97;
+        for (size_t i= 1; i<15; ++i) {
+            do{
+                id[i] = rand()%26 + 97;
+            }while(id[i] == id[i-1]);
+        }
+        id[15] = '\0'; //不能省略
+        QString strMovieId(id);
+        QString strMovie = "'"+strMovieId;
+        strMovie += "','" + edtMovieName->text();
+        strMovie += "','" + edtDirector->text();
+        strMovie += "','" + edtStar->text()+"'";
+        QSqlQuery query(*dbSQL);
+        QString sql = "call addMovie(" + strMovie+");";
+        if(!query.exec(sql)){
+            QString error = "errorCode: " + query.lastError().nativeErrorCode();
+            error += ("\nerrorMessage: " + query.lastError().text());
+            QMessageBox::critical(this, ERR_DB_QUERY, error);
+        }
     }
-
-    QSqlQuery query(*dbSQL);
-    QString sql = "call addMovie(" + movie+");";
-    query.exec(sql);
 }
 
 void AdminMainWindow::removeMovie(){
