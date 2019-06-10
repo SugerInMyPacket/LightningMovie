@@ -65,7 +65,7 @@ private slots:
     void showTicketState();
     void showStage();
     void closeOneTable(int _currentIndex);
-    void selectCurrentTuple();
+    void selectCurrentTuple(const QModelIndex &index);
     void removeCurrentTuple();
     void reconnectDB();
     void clearHistory();

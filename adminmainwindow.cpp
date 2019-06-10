@@ -113,6 +113,7 @@ void AdminMainWindow::openOneTable(const QString _tableName)
     // create a new table
     QString sql = "show columns from " + _tableName + ";";
     QTableView* page = new QTableView;
+    connect(page,SIGNAL(clicked(const QModelIndex &)),this,SLOT(selectCurrentTuple(const QModelIndex &)));
     QStandardItemModel* model = new QStandardItemModel;
     query.exec(sql);
 
@@ -158,7 +159,11 @@ void AdminMainWindow::closeOneTable(int _currentIndex)
     return;
 }
 
-void AdminMainWindow::selectCurrentTuple(){
+void AdminMainWindow::selectCurrentTuple(const QModelIndex &index){
+    int row = index.row();
+    int column = index.column();
+    int n = index.model()->columnCount();
+
 
 }
 
@@ -167,7 +172,9 @@ void AdminMainWindow::removeCurrentTuple(){
         QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
         return;
     }
-
+    if(tableName.length() <= 0 || currentKey.length()<=0){
+        return;
+    }
     QSqlQuery query(*dbSQL);
     QString sql = "call remove"+tableName+"('"+currentKey+"');";
     dbSQL->transaction();
