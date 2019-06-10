@@ -80,13 +80,18 @@ void AdminMainWindow::Connect_Signal_Slot()
     connect(ui->actRemoveTime,SIGNAL(triggered()), this,SLOT(removeTimeLine()));
     connect(ui->actModifyTime,SIGNAL(triggered()), this,SLOT(modifyTimeLine()));
 
+    connect(ui->actShowStage,SIGNAL(triggered()),this,SLOT(showStage()));
+    connect(ui->actAddStage,SIGNAL(triggered()),this,SLOT(addStage()));
+    connect(ui->actRemoveStage,SIGNAL(triggered()),this,SLOT(removeStage()));
+    connect(ui->actModifyStage,SIGNAL(triggered()),this,SLOT(modifyStage()));
 
     connect(ui->actShowPlayState,SIGNAL(triggered()),this,SLOT(showPlayState()));
     connect(ui->actAddPlayState,SIGNAL(triggered()),this,SLOT(addPlayState()));
     connect(ui->actRemovePlayState,SIGNAL(triggered()),this,SLOT(removePlayState()));
 
     connect(ui->actShowTicket, SIGNAL(triggered()), this, SLOT(showTicket()));
-
+    connect(ui->actAddSellState,SIGNAL(triggered()), this, SLOT(addTicketState()));
+    connect(ui->actRemoveSellState,SIGNAL(triggered()),this,SLOT(removeTicketState()));
    
     
     connect(ui->actClearHistory, SIGNAL(triggered()), this, SLOT(clearHistory()));
@@ -579,7 +584,6 @@ void AdminMainWindow::removePlayState(){
     if(dlgData->exec() == QDialog::Accepted){
         QString state = edtStateId->text();
         state = state.remove(2,state.length()-2);
-        qDebug()<<state;
         QString sql = "call removePlayState('"+state+"');";
         dbSQL->transaction();
         QSqlQuery query(*dbSQL);
@@ -635,7 +639,40 @@ void AdminMainWindow::modifyStage(){
 
 }
 void AdminMainWindow::removeStage(){
-
+    if(dbSQL == nullptr){
+        QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
+        return;
+    }
+    QDialog *dlgData = new QDialog(this);
+    QPushButton *btnRemove = new QPushButton(BTN_OKAY);
+    connect(btnRemove,SIGNAL(clicked()),dlgData,SLOT(accept()));
+    QLabel *labHallId = new QLabel(HALL_ID);
+    QLineEdit *edtHallId = new QLineEdit();
+    QLabel *labTimeNum = new QLabel(TIMELINE_NUM);
+    QLineEdit *edtTimeNum = new QLineEdit();
+    QGridLayout *grid = new QGridLayout();
+    dlgData->setFont(*font);
+    grid->addWidget(labHallId,0,0,1,1);
+    grid->addWidget(edtHallId,0,1,1,2);
+    grid->addWidget(labTimeNum,1,0,1,1);
+    grid->addWidget(edtTimeNum,1,1,1,2);
+    grid->addWidget(btnRemove,2,1,1,1);
+    dlgData->setLayout(grid);
+    if(dlgData->exec() == QDialog::Accepted){
+        QString stage = edtHallId->text()+","+edtTimeNum->text();
+        QString sql = "call removeStage("+stage+");";
+        dbSQL->transaction();
+        QSqlQuery query(*dbSQL);
+        query.prepare(sql);
+        if(query.exec() && query.lastError().type() == QSqlError::NoError){
+            dbSQL->commit();  //成功则提交
+        }else {
+            dbSQL->rollback();  //失败则回滚
+            QString error = "errorCode: " + query.lastError().nativeErrorCode();
+            error += ("\nerrorMessage: " + query.lastError().text());
+            QMessageBox::critical(this, ERR_DB_QUERY, error);
+        }
+    }
 }
 
 void AdminMainWindow::clearHistory()
