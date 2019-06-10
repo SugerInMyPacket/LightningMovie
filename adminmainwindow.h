@@ -53,7 +53,13 @@ private slots:
     void removeLabel();
 
     void showMovieLabel();
+    void addMovieLabel();
+    void removeMovieLabel();
+
     void showTimeLine();
+    void addTimeLine();
+    void removeTimeLine();
+    void modifyTimeLine();
 
     void showHall();
     void addHall();
@@ -61,9 +67,20 @@ private slots:
     void modifyHall();
 
     void showPlayState();
+    void addPlayState();
+    void removePlayState();
+
     void showTicket();
+
     void showTicketState();
+    void addTicketState();
+    void removeTicketState();
+
     void showStage();
+    void addStage();
+    void modifyStage();
+    void removeStage();
+
     void closeOneTable(int _currentIndex);
     void selectCurrentTuple(const QModelIndex &index);
     void removeCurrentTuple();

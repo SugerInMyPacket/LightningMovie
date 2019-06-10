@@ -170,7 +170,7 @@
     </property>
     <addaction name="actShowPlayState"/>
     <addaction name="actAddPlayState"/>
-    <addaction name="actRemoveState"/>
+    <addaction name="actRemovePlayState"/>
     <addaction name="separator"/>
     <addaction name="actShowSellState"/>
     <addaction name="actAddSellState"/>
@@ -464,13 +464,13 @@
     <string>addPlayState</string>
    </property>
   </action>
-  <action name="actRemoveState">
+  <action name="actRemovePlayState">
    <property name="icon">
     <iconset resource="icon.qrc">
      <normaloff>:/IconResource/delete.png</normaloff>:/IconResource/delete.png</iconset>
    </property>
    <property name="text">
-    <string>removeState</string>
+    <string>removePlayState</string>
    </property>
   </action>
   <action name="actShowSellState">

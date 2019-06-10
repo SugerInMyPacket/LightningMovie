@@ -67,17 +67,25 @@ void AdminMainWindow::Connect_Signal_Slot()
     connect(ui->actRemoveLabel,SIGNAL(triggered()),this,SLOT(removeLabel()));
 
     connect(ui->actShowMovieLabel, SIGNAL(triggered()), this, SLOT(showMovieLabel()));
-    
+    connect(ui->actAddMovieLabel, SIGNAL(triggered()), this,SLOT(addMovieLabel()));
+    connect(ui->actRemoveMovieLabel, SIGNAL(triggered()), this,SLOT(removeMovieLabel()));
+
     connect(ui->actShowHall, SIGNAL(triggered()), this, SLOT(showHall()));
     connect(ui->actNewHall, SIGNAL(triggered()), this,SLOT(addHall()));
     connect(ui->actRemoveHall,SIGNAL(triggered()), this,SLOT(removeHall()));
     connect(ui->actRepairHall,SIGNAL(triggered()), this,SLOT(modifyHall()));
 
     connect(ui->actShowTime, SIGNAL(triggered()), this, SLOT(showTimeLine()));
-    
+    connect(ui->actAddTime,SIGNAL(triggered()), this,SLOT(addTimeLine()));
+    connect(ui->actRemoveTime,SIGNAL(triggered()), this,SLOT(removeTimeLine()));
+    connect(ui->actModifyTime,SIGNAL(triggered()), this,SLOT(modifyTimeLine()));
+
+
     connect(ui->actShowPlayState,SIGNAL(triggered()),this,SLOT(showPlayState()));
-    
-   connect(ui->actShowTicket, SIGNAL(triggered()), this, SLOT(showTicket()));
+    connect(ui->actAddPlayState,SIGNAL(triggered()),this,SLOT(addPlayState()));
+    connect(ui->actRemovePlayState,SIGNAL(triggered()),this,SLOT(removePlayState()));
+
+    connect(ui->actShowTicket, SIGNAL(triggered()), this, SLOT(showTicket()));
 
    
     
@@ -279,6 +287,16 @@ void AdminMainWindow::showMovieLabel()
     openOneTable("movielabel");
 }
 
+
+void AdminMainWindow::addMovieLabel(){
+
+}
+
+
+void AdminMainWindow::removeMovieLabel(){
+
+}
+
 void AdminMainWindow::showHall()
 {
     openOneTable("hall");
@@ -346,10 +364,35 @@ void AdminMainWindow::showPlayState()
 {
     openOneTable("playstate");
 }
+void AdminMainWindow::addPlayState(){
+
+}
+
+void AdminMainWindow::removePlayState(){
+
+
+}
+
+void AdminMainWindow::addTimeLine(){
+
+}
+void AdminMainWindow::removeTimeLine(){
+
+}
+void AdminMainWindow::modifyTimeLine(){
+
+}
 
 void AdminMainWindow::showTicket()
 {
     openOneTable("ticket");
+}
+
+void AdminMainWindow::addTicketState(){
+
+}
+void AdminMainWindow::removeTicketState(){
+
 }
 
 void AdminMainWindow::showTicketState()
@@ -360,6 +403,16 @@ void AdminMainWindow::showTicketState()
 void AdminMainWindow::showStage()
 {
     openOneTable("stage");
+}
+
+void AdminMainWindow::addStage(){
+
+}
+void AdminMainWindow::modifyStage(){
+
+}
+void AdminMainWindow::removeStage(){
+
 }
 
 void AdminMainWindow::clearHistory()
