@@ -89,3 +89,5 @@ begin
     where hallId=mHallId and timeNum=mTimeNum;
 end//
 delimiter ;
+
+

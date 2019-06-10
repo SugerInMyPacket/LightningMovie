@@ -35,6 +35,8 @@ private:
     QMap<QString, bool> *map;
     bool showDBTree;
     QFont *font;
+    QString currentKey;
+    QString tableName;
 private:
     void initializeUI();
     void initializeMap();
@@ -47,6 +49,9 @@ private slots:
     void modifyMovie();
 
     void showLabel();
+    void addLabel();
+    void removeLabel();
+
     void showMovieLabel();
     void showTimeLine();
 
@@ -60,7 +65,8 @@ private slots:
     void showTicketState();
     void showStage();
     void closeOneTable(int _currentIndex);
-    void removeTuples();
+    void selectCurrentTuple();
+    void removeCurrentTuple();
     void reconnectDB();
     void clearHistory();
     void saveHistory();

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>826</width>
-    <height>421</height>
+    <height>428</height>
    </rect>
   </property>
   <property name="font">
@@ -221,6 +221,7 @@
    </attribute>
    <addaction name="actReConnectDB"/>
    <addaction name="actUpdate"/>
+   <addaction name="actRemoveCurrent"/>
    <addaction name="actClearHistory"/>
    <addaction name="actSaveHistory"/>
   </widget>
@@ -575,6 +576,15 @@
    </property>
    <property name="text">
     <string>removeTicket</string>
+   </property>
+  </action>
+  <action name="actRemoveCurrent">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/delete.png</normaloff>:/IconResource/delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>removeCurrent</string>
    </property>
   </action>
  </widget>

@@ -63,6 +63,9 @@ void AdminMainWindow::Connect_Signal_Slot()
     connect(ui->actModifyMovie,SIGNAL(triggered()),this,SLOT(modifyMovie()));
 
     connect(ui->actShowLabel, SIGNAL(triggered()), this, SLOT(showLabel()));
+    connect(ui->actAddLabel,SIGNAL(triggered()),this,SLOT(addLabel()));
+    connect(ui->actRemoveLabel,SIGNAL(triggered()),this,SLOT(removeLabel()));
+
     connect(ui->actShowMovieLabel, SIGNAL(triggered()), this, SLOT(showMovieLabel()));
     
     connect(ui->actShowHall, SIGNAL(triggered()), this, SLOT(showHall()));
@@ -80,6 +83,7 @@ void AdminMainWindow::Connect_Signal_Slot()
     
     connect(ui->actClearHistory, SIGNAL(triggered()), this, SLOT(clearHistory()));
     connect(ui->actSaveHistory, SIGNAL(triggered()), this, SLOT(saveHistory()));
+    connect(ui->actRemoveCurrent,SIGNAL(triggered()), this,SLOT(removeCurrentTuple()));
 }
 
 void AdminMainWindow::openOneTable(const QString _tableName)
@@ -154,8 +158,28 @@ void AdminMainWindow::closeOneTable(int _currentIndex)
     return;
 }
 
-void AdminMainWindow::removeTuples()
-{
+void AdminMainWindow::selectCurrentTuple(){
+
+}
+
+void AdminMainWindow::removeCurrentTuple(){
+    if(dbSQL == nullptr){
+        QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
+        return;
+    }
+
+    QSqlQuery query(*dbSQL);
+    QString sql = "call remove"+tableName+"('"+currentKey+"');";
+    dbSQL->transaction();
+    query.prepare(sql); // 防止注入sql攻击
+    if(query.exec() && query.lastError().type() == QSqlError::NoError){
+        dbSQL->commit();  //成功则提交
+    }else {
+        dbSQL->rollback();  //失败则回滚
+        QString error = "errorCode: " + query.lastError().nativeErrorCode();
+        error += ("\nerrorMessage: " + query.lastError().text());
+        QMessageBox::critical(this, ERR_DB_QUERY, error);
+    }
 }
 
 void AdminMainWindow::reconnectDB()
@@ -233,6 +257,14 @@ void AdminMainWindow::modifyMovie(){
 void AdminMainWindow::showLabel()
 {
     openOneTable("label");
+}
+
+void AdminMainWindow::addLabel(){
+
+}
+
+void AdminMainWindow::removeLabel(){
+
 }
 
 void AdminMainWindow::showMovieLabel()
