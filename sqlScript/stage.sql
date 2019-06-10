@@ -25,8 +25,67 @@ insert into stage values (5,5,"1234567890abcdk","co",5);
 
 select * from stage;
 
+-- 增加
 delimiter //
-create procedure     
-
+create procedure addStage(
+    in hallId int unsigned,
+    in movId char(15),
+    in price int(10),
+    in stageNumber int unsigned,
+    in staId char(2),
+    in timeNum int unsigned)
+begin 
+    insert into stage values(hallId,movId,price,stageNumber,staId,timeNum);
+end//
 delimiter ;
- 
+
+-- 删除
+delimiter //
+create procedure removeStage(
+    in mHallId int unsigned,
+    in mTimeNum int unsigned)
+begin 
+    delete from where hallId=mHallId and timeNum=mTimeNum;
+end//
+delimiter ;
+
+--更改过程
+--update price
+delimiter //
+create procedure modifyPrice(
+    in mhallId int unsigned,
+    in mTimeNum int unsigned,
+    in newPrice int unsigned
+)
+begin 
+    update stage set price=newPrice
+    where hallId=mHallId and timeNum=mTimeNum;
+end//
+delimiter ;
+
+--update movieId
+delimiter //
+create procedure modifyMovId(
+    in mhallId int unsigned,
+    in mTimeNum int unsigned,
+    int mMovName  nvarchar(100))
+begin 
+    declare id char(15);
+    select movieId into id from movie where movieName = mMovName;
+    update stage set movId=id
+    where hallId=mHallId and timeNum=mTimeNum;
+end//
+delimiter ;
+
+--update stateId
+delimiter //
+create procedure modifyStateId(
+    in mhallId int unsigned,
+    in mTimeNum int unsigned,
+    in newStateId char(2)
+)
+begin 
+    update stage set staId=newStateId
+    where hallId=mHallId and timeNum=mTimeNum;
+end//
+delimiter ;
