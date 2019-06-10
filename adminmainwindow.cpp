@@ -168,10 +168,6 @@ void AdminMainWindow::closeOneTable(int _currentIndex)
 }
 
 void AdminMainWindow::selectCurrentTuple(const QModelIndex &index){
-    int row = index.row();
-    int column = index.column();
-    int n = index.model()->columnCount();
-
 
 }
 
