@@ -604,7 +604,37 @@ void AdminMainWindow::addTimeLine(){
 
 }
 void AdminMainWindow::removeTimeLine(){
+if(dbSQL == nullptr){
+        QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
+        return;
+    }
+    QDialog *dlgData = new QDialog(this);
+    QPushButton *btnRemove = new QPushButton(BTN_OKAY);
+    connect(btnRemove,SIGNAL(clicked()),dlgData,SLOT(accept()));
 
+    QLabel *labTimeLine = new QLabel(TIME_NUMBER);
+    QLineEdit *edtTimeLine = new QLineEdit();
+    QGridLayout *grid = new QGridLayout();
+    dlgData->setFont(*font);
+    grid->addWidget(labTimeLine,0,0,1,1);
+    grid->addWidget(edtTimeLine,0,1,1,2);
+    grid->addWidget(btnRemove,1,1,1,1);
+    dlgData->setLayout(grid);
+    if(dlgData->exec() == QDialog::Accepted){
+        QString timeLine = edtTimeLine->text();
+        QString sql = "call removeTimeLine('"+timeLine+"');";   //RemoveTimeLine存储过程未写
+        dbSQL->transaction();
+        QSqlQuery query(*dbSQL);
+        query.prepare(sql);
+        if(query.exec() && query.lastError().type() == QSqlError::NoError){
+            dbSQL->commit();  //成功则提交
+        }else {
+            dbSQL->rollback();  //失败则回滚
+            QString error = "errorCode: " + query.lastError().nativeErrorCode();
+            error += ("\nerrorMessage: " + query.lastError().text());
+            QMessageBox::critical(this, ERR_DB_QUERY, error);
+        }
+    }
 }
 void AdminMainWindow::modifyTimeLine(){
 
@@ -619,7 +649,36 @@ void AdminMainWindow::addTicketState(){
 
 }
 void AdminMainWindow::removeTicketState(){
-
+if(dbSQL == nullptr){
+        QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
+        return;
+    }
+    QDialog *dlgData = new QDialog(this);
+    QPushButton *btnRemove = new QPushButton(BTN_OKAY);
+    connect(btnRemove,SIGNAL(clicked()),dlgData,SLOT(accept()));
+    QLabel *labTicketState = new QLabel(TICKET_STATE);
+    QLineEdit *edtTicketState = new QLineEdit();
+    QGridLayout *grid = new QGridLayout();
+    dlgData->setFont(*font);
+    grid->addWidget(labTicketState,0,0,1,1);
+    grid->addWidget(edtTicketState,0,1,1,2);
+    grid->addWidget(btnRemove,1,1,1,1);
+    dlgData->setLayout(grid);
+    if(dlgData->exec() == QDialog::Accepted){
+        QString ticketState = edtTicketState->text();
+        QString sql = "call removeTicketState('"+ticketState+"');";
+        dbSQL->transaction();
+        QSqlQuery query(*dbSQL);
+        query.prepare(sql);
+        if(query.exec() && query.lastError().type() == QSqlError::NoError){
+            dbSQL->commit();
+        }else {
+            dbSQL->rollback();
+            QString error = "errorCode: " + query.lastError().nativeErrorCode();
+            error += ("\nerrorMessage: " + query.lastError().text());
+            QMessageBox::critical(this, ERR_DB_QUERY, error);
+        }
+    }
 }
 
 void AdminMainWindow::showTicketState()
