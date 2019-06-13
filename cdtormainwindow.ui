@@ -25,15 +25,22 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_4">
-    <item row="0" column="0">
+    <item row="1" column="0">
      <widget class="QSplitter" name="sptMain">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
+      <property name="handleWidth">
+       <number>6</number>
+      </property>
       <widget class="QWidget" name="gridLayoutWidget">
        <layout class="QGridLayout" name="glaoSearch" columnstretch="4,0,0,0">
         <item row="0" column="0" colspan="2">
-         <widget class="QLineEdit" name="edtCondition"/>
+         <widget class="QLineEdit" name="edtCondition">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
         </item>
         <item row="0" column="2">
          <widget class="QPushButton" name="btnSearch">
@@ -41,9 +48,6 @@
            <string>PushButton</string>
           </property>
          </widget>
-        </item>
-        <item row="2" column="0" colspan="3">
-         <widget class="QTableView" name="tableView"/>
         </item>
         <item row="0" column="3" rowspan="3">
          <widget class="Line" name="line_2">
@@ -56,6 +60,13 @@
          <widget class="Line" name="line_3">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="3">
+         <widget class="QTabWidget" name="tables">
+          <property name="currentIndex">
+           <number>-1</number>
           </property>
          </widget>
         </item>
@@ -200,6 +211,33 @@
      <height>26</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>电影</string>
+    </property>
+    <addaction name="actShowMovie"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>场次</string>
+    </property>
+    <addaction name="actSearchStage"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>个人信息</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_4">
+    <property name="title">
+     <string>工具</string>
+    </property>
+    <addaction name="actConnectDB"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu_3"/>
+   <addaction name="menu_4"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="tbMain">
@@ -212,6 +250,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actShowMovie"/>
   </widget>
   <widget class="QToolBar" name="tbAssistant">
    <property name="windowTitle">
@@ -223,7 +262,35 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actConnectDB"/>
   </widget>
+  <action name="actShowMovie">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/movie.png</normaloff>:/IconResource/movie.png</iconset>
+   </property>
+   <property name="text">
+    <string>showMovie</string>
+   </property>
+  </action>
+  <action name="actSearchStage">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/stage.png</normaloff>:/IconResource/stage.png</iconset>
+   </property>
+   <property name="text">
+    <string>searchStage</string>
+   </property>
+  </action>
+  <action name="actConnectDB">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/IconResource/connect.png</normaloff>:/IconResource/connect.png</iconset>
+   </property>
+   <property name="text">
+    <string>connectDB</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="icon.qrc"/>

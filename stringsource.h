@@ -75,4 +75,6 @@ const QString LABEL_DSB ="标签描述";
 const QString PLAYSTATE_ID = "播放状态";
 const QString STAGE_ID = "场次编号";
 const QString TIMELINE_NUM = "时间线编号";
+const QString TIME_NUMBER = "";
+const QString  TICKET_STATE = "";
 #endif // STRINGSOURCE_H
