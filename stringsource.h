@@ -75,11 +75,20 @@ const QString LABEL_DSB ="标签描述";
 const QString PLAYSTATE_ID = "播放状态";
 const QString STAGE_ID = "场次编号";
 const QString TIMELINE_NUM = "时间线编号";
-//6.11凌晨添加
+
 const QString PLAYSTATE_ID = "播放状态";
 const QString TIME_NUMBER="时间轴序号";
 const QString TICKET_STATE="电影票状态";
 const QString STAGE_ID = "场次编号";
 const QString TIMELINE_NUM = "时间线编号";
+
+const QString STATE_ID="放映厅状态";
+const QString STATE_DSB="放映状态描述";
+const QString MOVIE_PRICE="电影价格";
+
+const QString TKT_STATE_ID="电影票状态ID";
+const QString TKT_STATE_DSB="电影票状态";
+//const QString STAGE_NUMBER="放映厅号码";
+
 
 #endif // STRINGSOURCE_H
