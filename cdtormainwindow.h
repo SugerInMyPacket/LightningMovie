@@ -6,6 +6,7 @@
 #include <qtableview.h>
 #include <qtabwidget.h>
 #include <qstandarditemmodel.h>
+#include <qdebug.h>
 #include "stringsource.h"
 #include "dbconnector.h"
 
@@ -26,6 +27,7 @@ private:
     QFont *font;
     bool openMovie;
     void DisplayQuery(QSqlQuery &_query, QStringList &_TableHeader, QString _TableName);
+    QStringList GetHeader(QString _TableName);
     void ConnectSS();
 private slots:
     void ConnectDB();

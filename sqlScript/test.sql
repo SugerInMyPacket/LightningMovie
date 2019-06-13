@@ -23,5 +23,7 @@ use lightning;
 
 -- select getKey("movielabel");
 -- select * from stageview;
-select * from stageview where movieName = ? order by playState, playDate,playTime,price,hallId;
+show columns from stageview;
+
+-- select * from stageview;
  

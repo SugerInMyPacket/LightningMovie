@@ -28,6 +28,7 @@ void CdtorMainWindow::ConnectSS(){
     connect(ui->actShowMovie,SIGNAL(triggered()),this,SLOT(OpenMovieTable()));
     connect(ui->actSearchStage,SIGNAL(triggered()),this,SLOT(FindStage()));
     connect(ui->tables, SIGNAL(tabCloseRequested(int)), this, SLOT(CloseOneTable(int)));
+    connect(ui->btnSearch,SIGNAL(clicked()),this,SLOT(FindStage()));
 }
 
 void CdtorMainWindow::OpenMovieTable(){
@@ -39,7 +40,7 @@ void CdtorMainWindow::OpenMovieTable(){
     if(openMovie)return;
 
     QSqlQuery query(*dbSQL);
-    const QString sql = "select * from movie order by movieName";
+    const QString sql = "select * from movieview order by 电影,导演,主演";
     query.prepare(sql);
     if(!query.exec() || !(query.lastError().type() == QSqlError::NoError) ){
         QString error = "error code: "+ query.lastError().nativeErrorCode();
@@ -47,11 +48,10 @@ void CdtorMainWindow::OpenMovieTable(){
         QMessageBox::critical(this,ERR_DB_QUERY,error);
         return;
     }
-    QStringList header;
-    header.append("电影");
-    header.append("主演");
-    header.append("导演");
-    DisplayQuery(query,header,"movie");
+
+    QStringList header = GetHeader("movieview");
+     DisplayQuery(query,header,"movie");
+
     openMovie = true;
     return;
 }
@@ -69,14 +69,10 @@ void CdtorMainWindow::FindStage(){
     QString sql= "select * from stageview where movieName = ? order by playState, playDate,playTime,price,hallId;";
     query.prepare(sql);
     query.addBindValue(strMovieName);
-    if(!query.exec()){
-
-        QStringList header;
-        header.append("电影");
-        header.append("主演");
-        header.append("导演");
-
-
+    if(query.exec()){
+        QStringList header = GetHeader("stageview");
+        QString title = "stage."+strMovieName;
+        DisplayQuery(query,header,title);
     }else{
         QString error = "errorCode: " + query.lastError().nativeErrorCode();
         error += ("\nerrorMessage: " + query.lastError().text());
@@ -86,14 +82,12 @@ void CdtorMainWindow::FindStage(){
 
 void CdtorMainWindow::CloseOneTable(int _currentIndex){
     QString tableName = ui->tables->tabText(_currentIndex);
-    if (openMovie) {
-        ui->tables->removeTab(_currentIndex);
+    ui->tables->removeTab(_currentIndex);
+    if (tableName =="movie" && openMovie) {
         openMovie = false;
     }
-
     return;
 }
-
 
 void CdtorMainWindow::DisplayQuery(QSqlQuery &_query, QStringList &_TableHeader, QString _TableName){
     QTableView *page = new QTableView();
@@ -103,7 +97,7 @@ void CdtorMainWindow::DisplayQuery(QSqlQuery &_query, QStringList &_TableHeader,
 
     while (_query.next()) {
         QList<QStandardItem*> items;
-        for (int i = 1; i <= n; ++i) {
+        for (int i = 0; i < n; ++i) {
             QStandardItem* item = new QStandardItem(_query.value(i).toString());
             item->setTextAlignment(Qt::AlignCenter);
             item->setFont(*font);
@@ -118,4 +112,26 @@ void CdtorMainWindow::DisplayQuery(QSqlQuery &_query, QStringList &_TableHeader,
     ui->tables->setCurrentIndex(
         ui->tables->addTab(
             page, QIcon(":/icon/table.png"), _TableName));
+}
+
+QStringList CdtorMainWindow::GetHeader(QString _TableName){
+    if(dbSQL == nullptr){
+        QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_OPEN);
+        return QStringList();
+    }
+    QSqlQuery query(*dbSQL);
+    QString sql = "show columns from "+_TableName+";";
+    query.prepare(sql);
+    if(query.exec() && query.lastError().type() == QSqlError::NoError){
+        QStringList header;
+        while(query.next()){
+            header.append(query.value(0).toString());
+        }
+        return header;
+    }else{
+        QString error = "errorCode: " + query.lastError().nativeErrorCode();
+        error += ("\nerrorMessage: " + query.lastError().text());
+        QMessageBox::critical(this, ERR_DB_QUERY, error);
+        return QStringList();
+    }
 }
