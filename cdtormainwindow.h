@@ -23,8 +23,9 @@ public:
 
 private:
     QSqlDatabase *dbSQL;
+    QFont *font;
     bool openMovie;
-
+    void DisplayQuery(QSqlQuery &_query, QStringList &_TableHeader, QString _TableName);
     void ConnectSS();
 private slots:
     void ConnectDB();

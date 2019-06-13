@@ -8,6 +8,7 @@ CdtorMainWindow::CdtorMainWindow(QWidget* parent)
     ui->setupUi(this);
     ui->tables->setTabsClosable(true);
     openMovie = false;
+    font = new QFont("Microsoft YaHei",15);
     ConnectSS();
     ConnectDB();
 }
@@ -46,37 +47,41 @@ void CdtorMainWindow::OpenMovieTable(){
         QMessageBox::critical(this,ERR_DB_QUERY,error);
         return;
     }
-
-    QTableView *page = new QTableView();
-    QStandardItemModel *model = new QStandardItemModel();
     QStringList header;
     header.append("电影");
     header.append("主演");
     header.append("导演");
-    model->setHorizontalHeaderLabels(header);
-
-    while (query.next()) {
-        QList<QStandardItem*> items;
-        for (int i = 1; i <= 3; ++i) {
-            QStandardItem* item = new QStandardItem(query.value(i).toString());
-            item->setTextAlignment(Qt::AlignCenter);
-            items.append(item);
-        }
-        model->appendRow(items);
-    }
-
-    page->setModel(model);
-    page->resizeColumnsToContents();
-    page->setEditTriggers(QTableView::NoEditTriggers);
-    ui->tables->setCurrentIndex(
-        ui->tables->addTab(
-            page, QIcon(":/icon/table.png"), "movie"));
+    DisplayQuery(query,header,"movie");
     openMovie = true;
     return;
 }
 
 void CdtorMainWindow::FindStage(){
+    if(dbSQL==nullptr){
+        QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_OPEN);
+        return;
+    }
 
+    QString strMovieName = ui->edtCondition->text();
+    if(strMovieName.length()<=0) return;
+
+    QSqlQuery query(*dbSQL);
+    QString sql= "select * from stageview where movieName = ? order by playState, playDate,playTime,price,hallId;";
+    query.prepare(sql);
+    query.addBindValue(strMovieName);
+    if(!query.exec()){
+
+        QStringList header;
+        header.append("电影");
+        header.append("主演");
+        header.append("导演");
+
+
+    }else{
+        QString error = "errorCode: " + query.lastError().nativeErrorCode();
+        error += ("\nerrorMessage: " + query.lastError().text());
+        QMessageBox::critical(this, ERR_DB_QUERY, error);
+    }
 }
 
 void CdtorMainWindow::CloseOneTable(int _currentIndex){
@@ -87,4 +92,30 @@ void CdtorMainWindow::CloseOneTable(int _currentIndex){
     }
 
     return;
+}
+
+
+void CdtorMainWindow::DisplayQuery(QSqlQuery &_query, QStringList &_TableHeader, QString _TableName){
+    QTableView *page = new QTableView();
+    QStandardItemModel *model = new QStandardItemModel();
+    model->setHorizontalHeaderLabels(_TableHeader);
+    int n = _TableHeader.size();
+
+    while (_query.next()) {
+        QList<QStandardItem*> items;
+        for (int i = 1; i <= n; ++i) {
+            QStandardItem* item = new QStandardItem(_query.value(i).toString());
+            item->setTextAlignment(Qt::AlignCenter);
+            item->setFont(*font);
+            items.append(item);
+        }
+        model->appendRow(items);
+    }
+
+    page->setModel(model);
+    page->resizeColumnsToContents();
+    page->setEditTriggers(QTableView::NoEditTriggers);
+    ui->tables->setCurrentIndex(
+        ui->tables->addTab(
+            page, QIcon(":/icon/table.png"), _TableName));
 }
