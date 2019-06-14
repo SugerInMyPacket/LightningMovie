@@ -33,4 +33,6 @@ use lightning;
 
 -- select * from ticket;
 
-call sellTicket(5,4,5);
+-- call sellTicket(5,4,5);
+
+select * from stageview;

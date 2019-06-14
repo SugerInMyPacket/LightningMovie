@@ -11,7 +11,6 @@ CdtorMainWindow::CdtorMainWindow(QWidget* parent)
     font = new QFont("Microsoft YaHei",15);
     ConnectSS();
     ConnectDB();
-    ShowTickets();
 }
 
 CdtorMainWindow::~CdtorMainWindow()
@@ -98,7 +97,7 @@ void CdtorMainWindow::ShowTickets(){
         return;
     }
 
-    QString stageNumber = "5";
+    QString stageNumber = ui->edtStage->text();
 
     QSqlQuery query(*dbSQL);
     const QString sql= "select sellState,hallRow,hallColumn from ticket where stageNum = ? order by hallRow,hallColumn";
@@ -150,11 +149,73 @@ void CdtorMainWindow::ShowTickets(){
 }
 
 void CdtorMainWindow::SellTickets(){
+    if(dbSQL == nullptr){
+        QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_OPEN);
+        return;
+    }
 
+    const QString stageNumber  = ui->edtStage->text();
+    const QString hallRow = ui->edtRow->text();
+    const QString hallColumn = ui->edtColumn->text();
+
+    if(stageNumber.length() == 0 ||
+        hallRow.length() == 0||
+        hallColumn.length() == 0)
+        return;
+
+    const QString sql= "call sellTicket(?,?,?);";
+
+    dbSQL->transaction();
+    QSqlQuery query(*dbSQL);
+    query.prepare(sql);
+    query.bindValue(0,stageNumber);
+    query.bindValue(1,hallRow);
+    query.bindValue(2,hallColumn);
+    if(query.exec() && query.lastError().type() == QSqlError::NoError){
+        dbSQL->commit();
+        return;
+    }else{
+        dbSQL->rollback();
+        QString error = "Error Code: "+query.lastError().nativeErrorCode();
+        error += "\nError Message: "+query.lastError().text();
+        QMessageBox::critical(this,ERR_DB_QUERY,error);
+        return;
+    }
 }
 
 void CdtorMainWindow::BackTickets(){
+    if(dbSQL == nullptr){
+        QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_OPEN);
+        return;
+    }
 
+    const QString stageNumber  = ui->edtReturn->text();
+    const QString hallRow = ui->edtRow1->text();
+    const QString hallColumn = ui->edtColumn1->text();
+
+    if(stageNumber.length() == 0 ||
+        hallRow.length() == 0||
+        hallColumn.length() == 0)
+        return;
+
+    const QString sql= "call backTicket(?,?,?);";
+
+    dbSQL->transaction();
+    QSqlQuery query(*dbSQL);
+    query.prepare(sql);
+    query.bindValue(0,stageNumber);
+    query.bindValue(1,hallRow);
+    query.bindValue(2,hallColumn);
+    if(query.exec() && query.lastError().type() == QSqlError::NoError){
+        dbSQL->commit();
+        return;
+    }else{
+        dbSQL->rollback();
+        QString error = "Error Code: "+query.lastError().nativeErrorCode();
+        error += "\nError Message: "+query.lastError().text();
+        QMessageBox::critical(this,ERR_DB_QUERY,error);
+        return;
+    }
 }
 
 void CdtorMainWindow::SelectMovie(const QModelIndex &index){
@@ -167,6 +228,7 @@ void CdtorMainWindow::SelectMovie(const QModelIndex &index){
 void CdtorMainWindow::SelectStage(const QModelIndex &index){
     if(index.column()<=0){
         ui->edtStage->setText(index.data().toString());
+        ShowTickets();
     }
 }
 
