@@ -107,9 +107,11 @@ void CdtorMainWindow::ShowTickets(){
     if(query.exec()){
         QTableView *page = new QTableView();
         QStandardItemModel *model = new QStandardItemModel();
-
+        connect(page,SIGNAL(clicked(const QModelIndex &)),this,
+                SLOT(SelectSeat(const QModelIndex &)));
+//        qDebug()<<"bind"<<endl;
         QList<QStandardItem*> items;
-        int lastRow = 0;
+        int lastRow = 1;
         while (query.next()) {
             int row = query.value(1).toInt();
             if(row != lastRow){
@@ -130,6 +132,7 @@ void CdtorMainWindow::ShowTickets(){
             }
             items.append(item);
         }
+        model->appendRow(items);
 
         QString title = "stage"+stageNumber+".seats";
         page->setModel(model);
@@ -162,6 +165,18 @@ void CdtorMainWindow::SelectMovie(const QModelIndex &index){
     }
 }
 
+void CdtorMainWindow::SelectStage(const QModelIndex &index){
+    if(index.column()<=0){
+        QString stage = index.data().toString();
+        ui->edtStage->setText(stage);
+    }
+}
+
+void CdtorMainWindow::SelectSeat(const QModelIndex &index){
+    ui->edtRow->setText(QString::number(index.row()+1));
+    ui->edtColumn->setText(QString::number(index.column()+1));
+}
+
 void CdtorMainWindow::DisplayQuery(QSqlQuery &_query, QStringList &_TableHeader, QString _TableName){
     QTableView *page = new QTableView();
     QStandardItemModel *model = new QStandardItemModel();
@@ -169,7 +184,12 @@ void CdtorMainWindow::DisplayQuery(QSqlQuery &_query, QStringList &_TableHeader,
     if(_TableName == "movie"){
         connect(page,SIGNAL(clicked(const QModelIndex &)),this,
                 SLOT(SelectMovie(const QModelIndex &)));
+    }else if(_TableName.indexOf('.') == 5){
+        connect(page,SIGNAL(doubleClicked(const QModelIndex &)),this,
+                SLOT(SelectStage(const QModelIndex &)));
     }
+
+//    qDebug()<<_TableName.indexOf('.')<<_TableName<<endl;
 
     model->setHorizontalHeaderLabels(_TableHeader);
     int n = _TableHeader.size();

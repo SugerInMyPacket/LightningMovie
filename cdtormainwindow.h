@@ -38,6 +38,8 @@ private slots:
     void BackTickets();
     void ShowTickets();
     void SelectMovie(const QModelIndex &index);
+    void SelectStage(const QModelIndex &index);
+    void SelectSeat(const QModelIndex &index);
 private:
     Ui::CdtorMainWindow* ui;
 };
