@@ -44,7 +44,7 @@ where hall.hallId = hid;
 
 while i<= hRow do
     set j=1;
-    while i<=hColumn do
+    while j<=hColumn do
         insert into ticket values(sNum,"no",i,j);
         set j = j + 1;
     end while;

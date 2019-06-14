@@ -23,7 +23,14 @@ use lightning;
 
 -- select getKey("movielabel");
 -- select * from stageview;
-show columns from stageview;
+-- show columns from stageview;
 
--- select * from stageview;
+-- select * from stage;
  
+-- call addTicket(5);
+
+-- call removeTicket(5);
+
+-- select * from ticket;
+
+call sellTicket(5,4,5);

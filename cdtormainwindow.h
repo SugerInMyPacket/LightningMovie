@@ -34,6 +34,9 @@ private slots:
     void OpenMovieTable();
     void CloseOneTable(int _currentIndex);
     void FindStage();
+    void SellTickets();
+    void BackTickets();
+    void ShowTickets();
 private:
     Ui::CdtorMainWindow* ui;
 };

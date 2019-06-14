@@ -11,13 +11,13 @@ CdtorMainWindow::CdtorMainWindow(QWidget* parent)
     font = new QFont("Microsoft YaHei",15);
     ConnectSS();
     ConnectDB();
+    ShowTickets();
 }
 
 CdtorMainWindow::~CdtorMainWindow()
 {
     delete ui;
 }
-
 
 void CdtorMainWindow::ConnectDB(){
     dbSQL = DBConnector::ConnectDB();
@@ -29,6 +29,8 @@ void CdtorMainWindow::ConnectSS(){
     connect(ui->actSearchStage,SIGNAL(triggered()),this,SLOT(FindStage()));
     connect(ui->tables, SIGNAL(tabCloseRequested(int)), this, SLOT(CloseOneTable(int)));
     connect(ui->btnSearch,SIGNAL(clicked()),this,SLOT(FindStage()));
+    connect(ui->btnSell,SIGNAL(clicked()),this,SLOT(SellTickets()));
+    connect(ui->btnReturn,SIGNAL(clicked()),this,SLOT(BackTickets()));
 }
 
 void CdtorMainWindow::OpenMovieTable(){
@@ -89,6 +91,70 @@ void CdtorMainWindow::CloseOneTable(int _currentIndex){
     return;
 }
 
+void CdtorMainWindow::ShowTickets(){
+
+    if(dbSQL == nullptr){
+        QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_OPEN);
+        return;
+    }
+
+    QString stageNumber = "5";
+
+    QSqlQuery query(*dbSQL);
+    const QString sql= "select sellState,hallRow,hallColumn from ticket where stageNum = ? order by hallRow,hallColumn";
+    query.prepare(sql);
+    query.addBindValue(stageNumber);
+    if(query.exec()){
+        QTableView *page = new QTableView();
+        QStandardItemModel *model = new QStandardItemModel();
+
+        QList<QStandardItem*> items;
+        int lastRow = 0;
+        while (query.next()) {
+            int row = query.value(1).toInt();
+            if(row != lastRow){
+                model->appendRow(items);
+                items.clear();
+                lastRow = row;
+            }
+            QStandardItem* item = new QStandardItem();
+            item->setTextAlignment(Qt::AlignCenter);
+            item->setFont(*font);
+            const QString state = query.value(0).toString();
+            if(state == "ye"){
+                item->setBackground(QBrush(QColor(255,0,0)));
+            }else if(state == "no"){
+                item->setBackground(QBrush(QColor(0,255,0)));
+            }else if(state == "ba"){
+                item->setBackground(QBrush(QColor(0,0,255)));
+            }
+            items.append(item);
+        }
+
+        QString title = "stage"+stageNumber+".seats";
+        page->setModel(model);
+        page->resizeColumnsToContents();
+        page->setEditTriggers(QTableView::NoEditTriggers);
+        ui->tables->setCurrentIndex(
+            ui->tables->addTab(
+                page, QIcon(":/icon/table.png"), title));
+
+    }else{
+        QString error = "errorCode: " + query.lastError().nativeErrorCode();
+        error += ("\nerrorMessage: " + query.lastError().text());
+        QMessageBox::critical(this, ERR_DB_QUERY, error);
+        return;
+    }
+}
+
+void CdtorMainWindow::SellTickets(){
+
+}
+
+void CdtorMainWindow::BackTickets(){
+
+}
+
 void CdtorMainWindow::DisplayQuery(QSqlQuery &_query, QStringList &_TableHeader, QString _TableName){
     QTableView *page = new QTableView();
     QStandardItemModel *model = new QStandardItemModel();
@@ -119,6 +185,7 @@ QStringList CdtorMainWindow::GetHeader(QString _TableName){
         QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_OPEN);
         return QStringList();
     }
+    if(_TableName.length() == 0) return QStringList();
     QSqlQuery query(*dbSQL);
     QString sql = "show columns from "+_TableName+";";
     query.prepare(sql);
@@ -135,3 +202,4 @@ QStringList CdtorMainWindow::GetHeader(QString _TableName){
         return QStringList();
     }
 }
+
