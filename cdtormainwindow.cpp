@@ -109,7 +109,6 @@ void CdtorMainWindow::ShowTickets(){
         QStandardItemModel *model = new QStandardItemModel();
         connect(page,SIGNAL(clicked(const QModelIndex &)),this,
                 SLOT(SelectSeat(const QModelIndex &)));
-//        qDebug()<<"bind"<<endl;
         QList<QStandardItem*> items;
         int lastRow = 1;
         while (query.next()) {
@@ -167,8 +166,7 @@ void CdtorMainWindow::SelectMovie(const QModelIndex &index){
 
 void CdtorMainWindow::SelectStage(const QModelIndex &index){
     if(index.column()<=0){
-        QString stage = index.data().toString();
-        ui->edtStage->setText(stage);
+        ui->edtStage->setText(index.data().toString());
     }
 }
 
@@ -188,8 +186,6 @@ void CdtorMainWindow::DisplayQuery(QSqlQuery &_query, QStringList &_TableHeader,
         connect(page,SIGNAL(doubleClicked(const QModelIndex &)),this,
                 SLOT(SelectStage(const QModelIndex &)));
     }
-
-//    qDebug()<<_TableName.indexOf('.')<<_TableName<<endl;
 
     model->setHorizontalHeaderLabels(_TableHeader);
     int n = _TableHeader.size();
