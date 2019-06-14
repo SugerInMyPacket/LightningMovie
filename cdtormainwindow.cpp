@@ -155,9 +155,22 @@ void CdtorMainWindow::BackTickets(){
 
 }
 
+void CdtorMainWindow::SelectMovie(const QModelIndex &index){
+    if(index.column()<=0){
+        QString movie = index.data().toString();
+        ui->edtCondition->setText(movie);
+    }
+}
+
 void CdtorMainWindow::DisplayQuery(QSqlQuery &_query, QStringList &_TableHeader, QString _TableName){
     QTableView *page = new QTableView();
     QStandardItemModel *model = new QStandardItemModel();
+
+    if(_TableName == "movie"){
+        connect(page,SIGNAL(clicked(const QModelIndex &)),this,
+                SLOT(SelectMovie(const QModelIndex &)));
+    }
+
     model->setHorizontalHeaderLabels(_TableHeader);
     int n = _TableHeader.size();
 

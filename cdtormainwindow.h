@@ -37,6 +37,7 @@ private slots:
     void SellTickets();
     void BackTickets();
     void ShowTickets();
+    void SelectMovie(const QModelIndex &index);
 private:
     Ui::CdtorMainWindow* ui;
 };
