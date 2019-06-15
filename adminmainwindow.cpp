@@ -123,11 +123,13 @@ void AdminMainWindow::openOneTable(const QString _tableName)
     ui->stateArea->appendPlainText(log);
 
     // create a new table
-    QString sql = "show columns from " + _tableName + ";";
+    QString sql = "show columns from ?;";
     QTableView* page = new QTableView;
     connect(page,SIGNAL(clicked(const QModelIndex &)),this,SLOT(selectCurrentTuple(const QModelIndex &)));
     QStandardItemModel* model = new QStandardItemModel;
-    query.exec(sql);
+    query.prepare(sql);
+    query.addBindValue(_tableName);
+    query.exec();
 
     ui->statusBar->showMessage("set tablel headers...");
     int count = query.size();
@@ -138,8 +140,10 @@ void AdminMainWindow::openOneTable(const QString _tableName)
     model->setHorizontalHeaderLabels(headers);
 
     ui->statusBar->showMessage("select data...");
-    sql = "select * from " + _tableName + ";";
-    query.exec(sql);
+    sql = "select * from ?;";
+    query.prepare(sql);
+    query.addBindValue(_tableName);
+    query.exec();
     while (query.next()) {
         QList<QStandardItem*> items;
         for (int i = 0; i < count; ++i) {
@@ -589,10 +593,11 @@ void AdminMainWindow::removeHall(){
     dlgData->setLayout(grid);
     if(dlgData->exec() == QDialog::Accepted){
         QString labels = edtHallId->text();
-        QString sql = "call removeHall("+labels+");";
+        QString sql = "call removeHall(?);";
         dbSQL->transaction();
         QSqlQuery query(*dbSQL);
         query.prepare(sql);
+        query.addBindValue(labels);
         if(query.exec() && query.lastError().type() == QSqlError::NoError){
             dbSQL->commit();  //成功则提交
         }else {
@@ -605,7 +610,43 @@ void AdminMainWindow::removeHall(){
 }
 
 void AdminMainWindow::modifyHall(){
-
+    if(dbSQL == nullptr){
+        QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
+        return;
+    }
+    QDialog *dlgData = new QDialog(this);
+    QPushButton *btnRemove = new QPushButton(BTN_OKAY);
+    connect(btnRemove,SIGNAL(clicked()),dlgData,SLOT(accept()));
+    QLabel *labHallId = new QLabel(HALL_ID);
+    QLineEdit *edtHallId = new QLineEdit();
+    QLabel *labHallName = new QLabel(HALL_NAME);
+    QLineEdit *edtHallName = new QLineEdit();
+    QGridLayout *grid = new QGridLayout();
+    dlgData->setFont(*font);
+    grid->addWidget(labHallId,0,0,1,1);
+    grid->addWidget(edtHallId,0,1,1,2);
+    grid->addWidget(labHallName,1,0,1,1);
+    grid->addWidget(edtHallName,1,1,1,2);
+    grid->addWidget(btnRemove,2,1,1,1);
+    dlgData->setLayout(grid);
+    if(dlgData->exec() == QDialog::Accepted){
+        QString hallId = edtHallId->text();
+        QString hallName = edtHallName->text();
+        QString sql = "call modifyHall(?,?);";
+        dbSQL->transaction();
+        QSqlQuery query(*dbSQL);
+        query.prepare(sql);
+        query.bindValue(0,hallId);
+        query.bindValue(1,hallName);
+        if(query.exec() && query.lastError().type() == QSqlError::NoError){
+            dbSQL->commit();  //成功则提交
+        }else {
+            dbSQL->rollback();  //失败则回滚
+            QString error = "errorCode: " + query.lastError().nativeErrorCode();
+            error += ("\nerrorMessage: " + query.lastError().text());
+            QMessageBox::critical(this, ERR_DB_QUERY, error);
+        }
+    }
 }
 
 void AdminMainWindow::showTimeLine()
