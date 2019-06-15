@@ -784,14 +784,14 @@ if(dbSQL == nullptr){
     grid->addWidget(btnOkay,2,1,1,1);
     dlgData->setLayout(grid);
     if(dlgData->exec()==QDialog::Accepted){
-        QString strTimeLineId=edtTktStateId->text();
-        QString strTimeLineDsb=edtTktStateDsb->text();
+        QString strTktStateId=edtTktStateId->text();
+        QString strTktStateDsb=edtTktStateDsb->text();
         QSqlQuery query(*dbSQL);
         dbSQL->transaction(); // 开启一个事务
-        QString sql = "call addTimeLine(?,?);";
+        QString sql = "call addTicketState(?,?);";
         query.prepare(sql);  // 防止注入sql攻击
-        query.bindValue(0,strTimeLineId);
-        query.bindValue(1,strTimeLineDsb);
+        query.bindValue(0,strTktStateId);
+        query.bindValue(1,strTktStateDsb);
         if(query.exec() && query.lastError().type() == QSqlError::NoError){
             dbSQL->commit();  //成功则提交
         }else {
@@ -820,10 +820,11 @@ if(dbSQL == nullptr){
     dlgData->setLayout(grid);
     if(dlgData->exec() == QDialog::Accepted){
         QString ticketState = edtTicketState->text();
-        QString sql = "call removeTicketState('"+ticketState+"');";
+        QString sql = "call removeTicketState(?);";
         dbSQL->transaction();
         QSqlQuery query(*dbSQL);
         query.prepare(sql);
+        query.bindValue(0,ticketState);
         if(query.exec() && query.lastError().type() == QSqlError::NoError){
             dbSQL->commit();
         }else {
