@@ -163,16 +163,30 @@ void CdtorMainWindow::SellTickets(){
         hallColumn.length() == 0)
         return;
 
-    const QString sql= "call sellTicket(?,?,?);";
+    QString sql= "call sellTicket(?,?,?,@flag);";
 
     dbSQL->transaction();
     QSqlQuery query(*dbSQL);
     query.prepare(sql);
     query.bindValue(0,stageNumber);
-    query.bindValue(1,hallRow);
-    query.bindValue(2,hallColumn);
+    query.bindValue(1,hallColumn);
+    query.bindValue(2,hallRow);
     if(query.exec() && query.lastError().type() == QSqlError::NoError){
+        sql = "select @flag;";
+        query.prepare(sql);
+        query.exec();
+        query.next();
+        int flag = query.value(0).toInt();
         dbSQL->commit();
+        if(flag == 1){
+            QString information ="stage: "+stageNumber;
+            information+="\nhallRow: "+ hallRow;
+            information += "\nhallCoumun: "+hallColumn;
+            QMessageBox::information(this,"购票成功",information);
+        }else{
+            QString error = "此票已售出！";
+            QMessageBox::critical(this,"购票失败",error);
+        }
         return;
     }else{
         dbSQL->rollback();
@@ -198,16 +212,30 @@ void CdtorMainWindow::BackTickets(){
         hallColumn.length() == 0)
         return;
 
-    const QString sql= "call backTicket(?,?,?);";
+    QString sql= "call backTicket(?,?,?,@flag);";
 
     dbSQL->transaction();
     QSqlQuery query(*dbSQL);
     query.prepare(sql);
     query.bindValue(0,stageNumber);
-    query.bindValue(1,hallRow);
-    query.bindValue(2,hallColumn);
+    query.bindValue(1,hallColumn);
+    query.bindValue(2,hallRow);
     if(query.exec() && query.lastError().type() == QSqlError::NoError){
+        sql = "select @flag;";
+        query.prepare(sql);
+        query.exec();
+        query.next();
+        int flag = query.value(0).toInt();
         dbSQL->commit();
+        if(flag == 1){
+            QString information ="stage: "+stageNumber;
+            information+="\nhallRow: "+ hallRow;
+            information += "\nhallCoumun: "+hallColumn;
+            QMessageBox::information(this,"退票成功",information);
+        }else{
+            QString error = "此票未售出！";
+            QMessageBox::critical(this,"退票失败",error);
+        }
         return;
     }else{
         dbSQL->rollback();

@@ -17,5 +17,8 @@
         <file>IconResource/state.png</file>
         <file>IconResource/stage.png</file>
         <file>IconResource/ticket.png</file>
+        <file>IconResource/purcher.png</file>
+        <file>IconResource/printer.png</file>
+        <file>IconResource/back.png</file>
     </qresource>
 </RCC>

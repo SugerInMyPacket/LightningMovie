@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>998</width>
-    <height>600</height>
+    <width>884</width>
+    <height>595</height>
    </rect>
   </property>
   <property name="font">
@@ -23,9 +23,12 @@
    <iconset resource="icon.qrc">
     <normaloff>:/IconResource/lightning.png</normaloff>:/IconResource/lightning.png</iconset>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_4">
-    <item row="1" column="0">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
      <widget class="QSplitter" name="sptMain">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -37,6 +40,14 @@
        <layout class="QGridLayout" name="glaoSearch" columnstretch="4,0,0,0">
         <item row="0" column="0" colspan="2">
          <widget class="QLineEdit" name="edtCondition">
+          <property name="styleSheet">
+           <string notr="true">QLineEdit{color:black}
+QLineEdit:hover{color:#F0F0F0}
+QLineEdit{background-color:rgba(200,0,0,80)}
+QLineEdit{border:2px}
+QLineEdit{border-radius:10px}
+QLineEdit{padding:2px 4px}</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -47,8 +58,21 @@
         </item>
         <item row="0" column="2">
          <widget class="QPushButton" name="btnSearch">
+          <property name="styleSheet">
+           <string notr="true">QPushButton{color:red}
+QPushButton:hover{color:black}
+QPushButton{background-color:rgba(221, 195, 47,75)}
+QPushButton{border:2px}
+QPushButton{border-radius:10px}
+QPushButton{padding:2px 4px}
+QPushButton{opacity:0.5}</string>
+          </property>
           <property name="text">
            <string>PushButton</string>
+          </property>
+          <property name="icon">
+           <iconset resource="icon.qrc">
+            <normaloff>:/IconResource/search.png</normaloff>:/IconResource/search.png</iconset>
           </property>
          </widget>
         </item>
@@ -83,9 +107,13 @@
         <enum>Qt::Vertical</enum>
        </property>
        <widget class="QWidget" name="gridLayoutWidget_2">
-        <layout class="QGridLayout" name="glaoSell">
+        <layout class="QGridLayout" name="glaoSell" columnstretch="1,2,1">
          <item row="2" column="0">
           <widget class="QLabel" name="labRow">
+           <property name="styleSheet">
+            <string notr="true">QLabel{color:red}
+QLabel{padding:2px 4px}</string>
+           </property>
            <property name="text">
             <string>TextLabel</string>
            </property>
@@ -99,6 +127,13 @@
          </item>
          <item row="1" column="1" colspan="2">
           <widget class="QLineEdit" name="edtStage">
+           <property name="styleSheet">
+            <string notr="true">QLineEdit{color:black}
+QLineEdit:hover{color:#FF0000}
+QLineEdit{border:2px}
+QLineEdit{border-radius:10px}
+QLineEdit{padding:2px 4px}</string>
+           </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
@@ -109,6 +144,14 @@
          </item>
          <item row="3" column="1" colspan="2">
           <widget class="QLineEdit" name="edtColumn">
+           <property name="styleSheet">
+            <string notr="true">QLineEdit{color:black}
+QLineEdit:hover{color:#FF0000}
+QLineEdit{background-color:#FFFFF0}
+QLineEdit{border:2px}
+QLineEdit{border-radius:10px}
+QLineEdit{padding:2px 4px}</string>
+           </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
@@ -119,6 +162,10 @@
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="labStage">
+           <property name="styleSheet">
+            <string notr="true">QLabel{color:red}
+QLabel{padding:2px 4px}</string>
+           </property>
            <property name="text">
             <string>TextLabel</string>
            </property>
@@ -132,6 +179,14 @@
          </item>
          <item row="2" column="1" colspan="2">
           <widget class="QLineEdit" name="edtRow">
+           <property name="styleSheet">
+            <string notr="true">QLineEdit{color:black}
+QLineEdit:hover{color:#FF0000}
+QLineEdit{background-color:#FFFFF0}
+QLineEdit{border:2px}
+QLineEdit{border-radius:10px}
+QLineEdit{padding:2px 4px}</string>
+           </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
@@ -142,6 +197,10 @@
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="labColumn">
+           <property name="styleSheet">
+            <string notr="true">QLabel{color:red}
+QLabel{padding:2px 4px}</string>
+           </property>
            <property name="text">
             <string>TextLabel</string>
            </property>
@@ -155,8 +214,21 @@
          </item>
          <item row="4" column="1">
           <widget class="QPushButton" name="btnSell">
+           <property name="styleSheet">
+            <string notr="true">QPushButton{color:red}
+QPushButton:hover{color:black}
+QPushButton{background-color:rgba(221, 195, 47,75)}
+QPushButton{border:2px}
+QPushButton{border-radius:10px}
+QPushButton{padding:2px 4px}
+QPushButton{opacity:0.5}</string>
+           </property>
            <property name="text">
             <string>PushButton</string>
+           </property>
+           <property name="icon">
+            <iconset resource="icon.qrc">
+             <normaloff>:/IconResource/purcher.png</normaloff>:/IconResource/purcher.png</iconset>
            </property>
           </widget>
          </item>
@@ -167,51 +239,36 @@
            </property>
           </widget>
          </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="gridLayoutWidget_3">
-        <layout class="QGridLayout" name="glaoReturn">
-         <item row="3" column="1" colspan="2">
-          <widget class="QLineEdit" name="edtColumn1"/>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="labRow1">
-           <property name="text">
-            <string>TextLabel</string>
+         <item row="4" column="2">
+          <widget class="QPushButton" name="btnPrint">
+           <property name="styleSheet">
+            <string notr="true">QPushButton{color:red}
+QPushButton:hover{color:black}
+QPushButton{background-color:rgba(221, 195, 47,75)}
+QPushButton{border:2px}
+QPushButton{border-radius:10px}
+QPushButton{padding:2px 4px}
+QPushButton{opacity:0.5}</string>
            </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>edtRow1</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="labColumn1">
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>edtColumn1</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="QPushButton" name="btnReturn">
            <property name="text">
             <string>PushButton</string>
            </property>
+           <property name="icon">
+            <iconset resource="icon.qrc">
+             <normaloff>:/IconResource/printer.png</normaloff>:/IconResource/printer.png</iconset>
+           </property>
           </widget>
          </item>
-         <item row="2" column="1" colspan="2">
-          <widget class="QLineEdit" name="edtRow1"/>
-         </item>
-         <item row="1" column="0">
+        </layout>
+       </widget>
+       <widget class="QWidget" name="gridLayoutWidget_3">
+        <layout class="QGridLayout" name="glaoReturn" columnstretch="1,2,1">
+         <item row="0" column="0">
           <widget class="QLabel" name="labReturn">
+           <property name="styleSheet">
+            <string notr="true">QLabel{color:red}
+QLabel{padding:2px 4px}</string>
+           </property>
            <property name="text">
             <string>TextLabel</string>
            </property>
@@ -223,20 +280,99 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1" colspan="2">
-          <widget class="QLineEdit" name="edtReturn"/>
+         <item row="0" column="1" colspan="2">
+          <widget class="QLineEdit" name="edtReturn">
+           <property name="styleSheet">
+            <string notr="true">QLineEdit{color:black}
+QLineEdit:hover{color:#FF0000}
+QLineEdit{border:2px}
+QLineEdit{border-radius:10px}
+QLineEdit{padding:2px 4px}</string>
+           </property>
+          </widget>
          </item>
-         <item row="0" column="0" colspan="3">
-          <widget class="Line" name="line">
+         <item row="4" column="0" colspan="3">
+          <widget class="Line" name="line_5">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
-         <item row="5" column="0" colspan="3">
-          <widget class="Line" name="line_5">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+         <item row="2" column="1" colspan="2">
+          <widget class="QLineEdit" name="edtColumn1">
+           <property name="styleSheet">
+            <string notr="true">QLineEdit{color:black}
+QLineEdit:hover{color:#FF0000}
+QLineEdit{background-color:#FFFFF0}
+QLineEdit{border:2px}
+QLineEdit{border-radius:10px}
+QLineEdit{padding:2px 4px}</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="labColumn1">
+           <property name="styleSheet">
+            <string notr="true">QLabel{color:red}
+QLabel{padding:2px 4px}</string>
+           </property>
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="buddy">
+            <cstring>edtColumn1</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1" colspan="2">
+          <widget class="QLineEdit" name="edtRow1">
+           <property name="styleSheet">
+            <string notr="true">QLineEdit{color:black}
+QLineEdit:hover{color:#FF0000}
+QLineEdit{background-color:#FFFFF0}
+QLineEdit{border:2px}
+QLineEdit{border-radius:10px}
+QLineEdit{padding:2px 4px}</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QPushButton" name="btnReturn">
+           <property name="styleSheet">
+            <string notr="true">QPushButton{color:red}
+QPushButton:hover{color:black}
+QPushButton{background-color:rgba(221, 195, 47,75)}
+QPushButton{border:2px}
+QPushButton{border-radius:10px}
+QPushButton{padding:2px 4px}
+QPushButton{opacity:0.5}</string>
+           </property>
+           <property name="text">
+            <string>PushButton</string>
+           </property>
+           <property name="icon">
+            <iconset resource="icon.qrc">
+             <normaloff>:/IconResource/back.png</normaloff>:/IconResource/back.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="labRow1">
+           <property name="styleSheet">
+            <string notr="true">QLabel{color:red}
+QLabel{padding:2px 4px}</string>
+           </property>
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="buddy">
+            <cstring>edtRow1</cstring>
            </property>
           </widget>
          </item>
@@ -252,7 +388,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>998</width>
+     <width>884</width>
      <height>26</height>
     </rect>
    </property>
@@ -337,6 +473,20 @@
    </property>
   </action>
  </widget>
+ <tabstops>
+  <tabstop>edtStage</tabstop>
+  <tabstop>edtRow</tabstop>
+  <tabstop>edtColumn</tabstop>
+  <tabstop>btnSell</tabstop>
+  <tabstop>btnPrint</tabstop>
+  <tabstop>edtReturn</tabstop>
+  <tabstop>edtRow1</tabstop>
+  <tabstop>edtColumn1</tabstop>
+  <tabstop>btnReturn</tabstop>
+  <tabstop>btnSearch</tabstop>
+  <tabstop>edtCondition</tabstop>
+  <tabstop>tables</tabstop>
+ </tabstops>
  <resources>
   <include location="icon.qrc"/>
  </resources>

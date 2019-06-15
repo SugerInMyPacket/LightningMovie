@@ -66,12 +66,21 @@ delimiter //
 create procedure sellTicket(
     in sNum int unsigned,
     in hColumn int unsigned,
-    in hRow int unsigned)
+    in hRow int unsigned,
+    out flag int unsigned)
 begin
-update ticket set sellState = "ye" 
-where stageNum = sNum 
-and hallColumn = hColumn
-and hallRow = hRow;
+declare _state char(2);
+select sellState into _state from ticket 
+where stageNum = sNum and hallColumn = hColumn and hallRow = hRow;
+
+if _state  != "ye" then
+    set flag = 1;
+    update ticket set sellState = "ye"  where stageNum = sNum 
+    and hallColumn = hColumn
+    and hallRow = hRow;
+else
+set flag = 0;
+end if;
 end
 //
 delimiter ;
@@ -80,12 +89,19 @@ delimiter //
 create procedure backTicket(
     in sNum int unsigned,
     in hColumn int unsigned,
-    in hRow int unsigned)
+    in hRow int unsigned,
+    out flag int unsigned)
 begin
-update ticket set sellState = "ba" 
-where stageNum = sNum 
-and hallColumn = hColumn
-and hallRow = hRow;
+declare _state char(2);
+select sellState into _state from ticket where
+stageNum = sNum and hallColumn = hColumn and hallRow = hRow;
+if _state != "ye" then
+set flag = 1;
+update ticket set sellState = "ba" where 
+stageNum = sNum and hallColumn = hColumn and hallRow = hRow
+else
+set flag = 0;
+end if;
 end
 //
 delimiter ;
