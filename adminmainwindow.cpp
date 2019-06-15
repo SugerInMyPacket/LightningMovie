@@ -89,9 +89,12 @@ void AdminMainWindow::Connect_Signal_Slot()
     connect(ui->actRemovePlayState,SIGNAL(triggered()),this,SLOT(removePlayState()));
 
     connect(ui->actShowTicket, SIGNAL(triggered()), this, SLOT(showTicket()));
+    connect(ui->actAddTicket, SIGNAL(triggered()), this,SLOT(addTicket()));
+    connect(ui->actRemoveTicket,SIGNAL(triggered()),this,SLOT(removeTicket()));
+
     connect(ui->actAddSellState,SIGNAL(triggered()), this, SLOT(addTicketState()));
     connect(ui->actRemoveSellState,SIGNAL(triggered()),this,SLOT(removeTicketState()));
-   
+    connect(ui->actShowSellState,SIGNAL(triggered()),this,SLOT(showTicketState()));
     
     connect(ui->actClearHistory, SIGNAL(triggered()), this, SLOT(clearHistory()));
     connect(ui->actSaveHistory, SIGNAL(triggered()), this, SLOT(saveHistory()));
@@ -131,7 +134,6 @@ void AdminMainWindow::openOneTable(const QString _tableName)
 
     ui->statusBar->showMessage("set tablel headers...");
     int count = query.size();
-    qDebug()<<count<<endl;
     QStringList headers;
     while (query.next()) {
         headers.append(query.value(0).toString());
@@ -415,7 +417,6 @@ void AdminMainWindow::showMovieLabel()
     openOneTable("movielabel");
 }
 
-
 void AdminMainWindow::addMovieLabel(){
       if(dbSQL == nullptr){
           QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
@@ -453,7 +454,6 @@ void AdminMainWindow::addMovieLabel(){
           }
       }
 }
-
 
 void AdminMainWindow::removeMovieLabel(){
     if(dbSQL == nullptr){
@@ -584,7 +584,43 @@ void AdminMainWindow::removeHall(){
 }
 
 void AdminMainWindow::modifyHall(){
-
+    if(dbSQL == nullptr){
+        QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
+        return;
+    }
+    QDialog *dlgData = new QDialog(this);
+    QPushButton *btnOkay = new QPushButton(BTN_OKAY);
+    connect(btnOkay, SIGNAL(clicked()), dlgData, SLOT(accept()));
+    QLabel *labHallId = new QLabel(HALL_ID);
+    QLabel *labHallName = new QLabel(HALL_NAME);
+    QLineEdit *edtHallId = new QLineEdit();
+    QLineEdit *edtHallName = new QLineEdit();
+    QGridLayout *grid = new QGridLayout();
+    dlgData->setFont(*font);
+    grid->addWidget(labHallId,0,0,1,1);
+    grid->addWidget(edtHallId,0,1,1,2);
+    grid->addWidget(labHallName,1,0,1,2);
+    grid->addWidget(edtHallName,1,1,1,2);
+    grid->addWidget(btnOkay,2,1,1,1);
+    dlgData->setLayout(grid);
+    if(dlgData->exec()==QDialog::Accepted){
+        QString strHallId=edtHallId->text();
+        QString strHallName=edtHallName->text();
+        QSqlQuery query(*dbSQL);
+        dbSQL->transaction();   // 开启一个事务
+        QString sql = "call modifyHall(?,?);";
+        query.prepare(sql); // 防止注入sql攻击
+        query.bindValue(0,strHallId);
+        query.bindValue(1,strHallName);
+        if(query.exec() && query.lastError().type() == QSqlError::NoError){
+            dbSQL->commit();  //成功则提交
+        }else {
+            dbSQL->rollback();  //失败则回滚
+            QString error = "errorCode: " + query.lastError().nativeErrorCode();
+            error += ("\nerrorMessage: " + query.lastError().text());
+            QMessageBox::critical(this, ERR_DB_QUERY, error);
+        }
+    }
 }
 
 void AdminMainWindow::showTimeLine()
@@ -629,6 +665,7 @@ void AdminMainWindow::removeTimeLine(){
         }
     }
 }
+
 void AdminMainWindow::modifyTimeLine(){
 
 }
@@ -716,6 +753,14 @@ void AdminMainWindow::removePlayState(){
 void AdminMainWindow::showTicket()
 {
     openOneTable("ticket");
+}
+
+void AdminMainWindow::addTicket(){
+
+}
+
+void AdminMainWindow::removeTicket(){
+
 }
 
 void AdminMainWindow::addTicketState(){
