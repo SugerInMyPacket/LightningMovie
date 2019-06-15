@@ -123,16 +123,17 @@ void AdminMainWindow::openOneTable(const QString _tableName)
     ui->stateArea->appendPlainText(log);
 
     // create a new table
-    QString sql = "show columns from ?;";
+    QString sql = "show columns from "+_tableName+";";
     QTableView* page = new QTableView;
     connect(page,SIGNAL(clicked(const QModelIndex &)),this,SLOT(selectCurrentTuple(const QModelIndex &)));
     QStandardItemModel* model = new QStandardItemModel;
-    query.prepare(sql);
-    query.addBindValue(_tableName);
-    query.exec();
+//    query.prepare(sql);
+//    query.addBindValue(_tableName);
+    query.exec(sql);
 
     ui->statusBar->showMessage("set tablel headers...");
     int count = query.size();
+    qDebug()<<count<<endl;
     QStringList headers;
     while (query.next()) {
         headers.append(query.value(0).toString());
@@ -140,10 +141,10 @@ void AdminMainWindow::openOneTable(const QString _tableName)
     model->setHorizontalHeaderLabels(headers);
 
     ui->statusBar->showMessage("select data...");
-    sql = "select * from ?;";
-    query.prepare(sql);
-    query.addBindValue(_tableName);
-    query.exec();
+    sql = "select * from "+_tableName+";";
+//    query.prepare(sql);
+//    query.addBindValue(_tableName);
+    query.exec(sql);
     while (query.next()) {
         QList<QStandardItem*> items;
         for (int i = 0; i < count; ++i) {
