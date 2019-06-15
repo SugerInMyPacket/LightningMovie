@@ -127,8 +127,6 @@ void AdminMainWindow::openOneTable(const QString _tableName)
     QTableView* page = new QTableView;
     connect(page,SIGNAL(clicked(const QModelIndex &)),this,SLOT(selectCurrentTuple(const QModelIndex &)));
     QStandardItemModel* model = new QStandardItemModel;
-//    query.prepare(sql);
-//    query.addBindValue(_tableName);
     query.exec(sql);
 
     ui->statusBar->showMessage("set tablel headers...");
@@ -142,8 +140,6 @@ void AdminMainWindow::openOneTable(const QString _tableName)
 
     ui->statusBar->showMessage("select data...");
     sql = "select * from "+_tableName+";";
-//    query.prepare(sql);
-//    query.addBindValue(_tableName);
     query.exec(sql);
     while (query.next()) {
         QList<QStandardItem*> items;
@@ -320,39 +316,20 @@ void AdminMainWindow::modifyMovie(){
         QString strMovieName = edtMovieName->text();
         QString strMovieDirector = edtDirector->text();
         QString strMovieStar = edtStar->text();
-        QString sql;
-        if(!strMovieDirector.isEmpty()){
-            sql = "call modifyDirector(?,?);";
-            dbSQL->transaction(); // 开启一个事务
-            QSqlQuery query(*dbSQL);
-            query.prepare(sql);
-            query.bindValue(0,strMovieName);
-            query.bindValue(1,strMovieDirector);
-            if(query.exec() && query.lastError().type() == QSqlError::NoError){
-                dbSQL->commit();  //成功则提交
-            }else {
-                dbSQL->rollback();  //失败则回滚
-                QString error = "errorCode: " + query.lastError().nativeErrorCode();
-                error += ("\nerrorMessage: " + query.lastError().text());
-                QMessageBox::critical(this, ERR_DB_QUERY, error);
-            }
-        }
-
-        if(!strMovieStar.isEmpty()){
-            sql = "call modifyStar(?,?);";
-            dbSQL->transaction(); // 开启一个事务
-            QSqlQuery query(*dbSQL);
-            query.prepare(sql);
-            query.bindValue(0,strMovieName);
-            query.bindValue(1,strMovieStar);
-            if(query.exec() && query.lastError().type() == QSqlError::NoError){
-                dbSQL->commit();  //成功则提交
-            }else {
-                dbSQL->rollback();  //失败则回滚
-                QString error = "errorCode: " + query.lastError().nativeErrorCode();
-                error += ("\nerrorMessage: " + query.lastError().text());
-                QMessageBox::critical(this, ERR_DB_QUERY, error);
-            }
+        QSqlQuery query(*dbSQL);
+        dbSQL->transaction(); // 开启一个事务
+        QString sql = "call addMovie(?,?,?);";
+        query.prepare(sql); // 防止注入sql攻击
+        query.bindValue(0,strMovieName);
+        query.bindValue(1,strMovieDirector);
+        query.bindValue(2,strMovieStar);
+        if(query.exec() && query.lastError().type() == QSqlError::NoError){
+            dbSQL->commit();  //成功则提交
+        }else {
+            dbSQL->rollback();  //失败则回滚
+            QString error = "errorCode: " + query.lastError().nativeErrorCode();
+            error += ("\nerrorMessage: " + query.lastError().text());
+            QMessageBox::critical(this, ERR_DB_QUERY, error);
         }
     }
 }
@@ -363,43 +340,41 @@ void AdminMainWindow::showLabel()
 }
 
 void AdminMainWindow::addLabel(){
-    if(dbSQL == nullptr){
-            QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
-            return;
-    }
-    QDialog *dlgData = new QDialog(this);
-    QPushButton *btnOkay = new QPushButton(BTN_OKAY);
-    connect(btnOkay, SIGNAL(clicked()), dlgData, SLOT(accept()));
-
-    QLabel *labLabelId=new QLabel(LABEL_ID);    //char(15)
-    QLineEdit *edtLabelId=new QLineEdit();
-    QLabel *labLabelDsb=new QLabel(LABEL_DSB);  //nvarchar(100)
-    QLineEdit *edtLabelDsb=new QLineEdit();
-    dlgData->setFont(*font);
-    QGridLayout *grid = new QGridLayout();
-    grid->addWidget(labLabelId,0,0,1,1);
-    grid->addWidget(edtLabelId,0,1,1,2);
-    grid->addWidget(labLabelDsb,1,0,1,1);
-    grid->addWidget(edtLabelDsb,1,1,1,2);
-    grid->addWidget(btnOkay,2,1,1,1);
-    dlgData->setLayout(grid);
-    if(dlgData->exec()==QDialog::Accepted){
-        QString strLabel="'"+edtLabelId->text();
-        strLabel+="','"+edtLabelDsb->text()+"'";
-        QSqlQuery query(*dbSQL);
-        dbSQL->transaction(); // 开启一个事务
-        QString sql = "call addLabel(" + strLabel+");";
-
-        query.prepare(sql); // 防止注入sql攻击
-        if(query.exec() && query.lastError().type() == QSqlError::NoError){
-            dbSQL->commit();  //成功则提交
-        }else {
-            dbSQL->rollback();  //失败则回滚
-            QString error = "errorCode: " + query.lastError().nativeErrorCode();
-            error += ("\nerrorMessage: " + query.lastError().text());
-            QMessageBox::critical(this, ERR_DB_QUERY, error);
-        }
-    }
+if(dbSQL == nullptr){
+          QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
+          return;
+      }
+      QDialog *dlgData = new QDialog(this);
+      QPushButton *btnOkay = new QPushButton(BTN_OKAY);
+      connect(btnOkay, SIGNAL(clicked()), dlgData, SLOT(accept()));
+      QLabel *LabMovieId=new QLabel(MOVIE_NAME);
+      QLineEdit *edtMovieId=new QLineEdit();
+      QLabel *LabLabelId=new QLabel(LABEL_ID);
+      QLineEdit *edtLabelId=new QLineEdit();
+      QGridLayout *grid = new QGridLayout();
+      dlgData->setFont(*font);
+      grid->addWidget(LabMovieId,0,0,1,1);
+      grid->addWidget(edtMovieId,0,1,1,2);
+      grid->addWidget(LabLabelId,1,0,1,1);
+      grid->addWidget(edtLabelId,1,1,1,2);
+      grid->addWidget(btnOkay,2,1,1,1);
+      dlgData->setLayout(grid);
+      if(dlgData->exec()==QDialog::Accepted){
+          QString strMovieLabel="'"+edtMovieId->text();
+          strMovieLabel+="','"+edtLabelId->text()+"'";
+          QSqlQuery query(*dbSQL);
+          dbSQL->transaction(); // 开启一个事务
+          QString sql = "call addMovieLabel(" + strMovieLabel+");";
+          query.prepare(sql); // 防止注入sql攻击
+          if(query.exec() && query.lastError().type() == QSqlError::NoError){
+              dbSQL->commit();  //成功则提交
+          }else {
+              dbSQL->rollback();  //失败则回滚
+              QString error = "errorCode: " + query.lastError().nativeErrorCode();
+              error += ("\nerrorMessage: " + query.lastError().text());
+              QMessageBox::critical(this, ERR_DB_QUERY, error);
+          }
+      }
 }
 
 void AdminMainWindow::removeLabel(){
@@ -420,11 +395,10 @@ void AdminMainWindow::removeLabel(){
     dlgData->setLayout(grid);
     if(dlgData->exec() == QDialog::Accepted){
         QString labelId = edtLabelId->text();
-        QString sql = "call removeLabel(?);";
+        QString sql = "call removeLabel('"+labelId+"');";
         dbSQL->transaction();
         QSqlQuery query(*dbSQL);
         query.prepare(sql);
-        query.addBindValue(labelId);
         if(query.exec() && query.lastError().type() == QSqlError::NoError){
             dbSQL->commit();  //成功则提交
         }else {
@@ -441,35 +415,34 @@ void AdminMainWindow::showMovieLabel()
     openOneTable("movielabel");
 }
 
+
 void AdminMainWindow::addMovieLabel(){
- if(dbSQL == nullptr){
+      if(dbSQL == nullptr){
           QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
           return;
       }
       QDialog *dlgData = new QDialog(this);
       QPushButton *btnOkay = new QPushButton(BTN_OKAY);
       connect(btnOkay, SIGNAL(clicked()), dlgData, SLOT(accept()));
-      QLabel *LabMovieName=new QLabel(MOVIE_NAME);
-      QLineEdit *edtMovieName=new QLineEdit();
+      QLabel *LabMovieId=new QLabel(MOVIE_NAME);
+      QLineEdit *edtMovieId=new QLineEdit();
       QLabel *LabLabelId=new QLabel(LABEL_ID);
       QLineEdit *edtLabelId=new QLineEdit();
       QGridLayout *grid = new QGridLayout();
       dlgData->setFont(*font);
-      grid->addWidget(LabMovieName,0,0,1,1);
-      grid->addWidget(edtMovieName,0,1,1,2);
+      grid->addWidget(LabMovieId,0,0,1,1);
+      grid->addWidget(edtMovieId,0,1,1,2);
       grid->addWidget(LabLabelId,1,0,1,1);
       grid->addWidget(edtLabelId,1,1,1,2);
       grid->addWidget(btnOkay,2,1,1,1);
       dlgData->setLayout(grid);
       if(dlgData->exec()==QDialog::Accepted){
-          QString strMovieName = edtMovieName->text();
-          QString strLabelId = edtLabelId->text();
+          QString strMovieLabel="'"+edtMovieId->text();
+          strMovieLabel+="','"+edtLabelId->text()+"'";
           QSqlQuery query(*dbSQL);
           dbSQL->transaction(); // 开启一个事务
-          QString sql = "call addMovieLabel(?,?);";
+          QString sql = "call addMovieLabel(" + strMovieLabel+");";
           query.prepare(sql); // 防止注入sql攻击
-          query.bindValue(0,strMovieName);
-          query.bindValue(1,strLabelId);
           if(query.exec() && query.lastError().type() == QSqlError::NoError){
               dbSQL->commit();  //成功则提交
           }else {
@@ -480,6 +453,7 @@ void AdminMainWindow::addMovieLabel(){
           }
       }
 }
+
 
 void AdminMainWindow::removeMovieLabel(){
     if(dbSQL == nullptr){
@@ -502,14 +476,11 @@ void AdminMainWindow::removeMovieLabel(){
     grid->addWidget(btnRemove,2,1,1,1);
     dlgData->setLayout(grid);
     if(dlgData->exec() == QDialog::Accepted){
-        QString strMovieName = edtMovieName->text();
-        QString strLabelId = edtLabelId->text();
-        QString sql = "call removeMovieLabel(?,?);";
+        QString labels = edtMovieName->text()+ "','"+ edtLabelId->text();
+        QString sql = "call removeMovieLabel('"+labels+"');";
         dbSQL->transaction();
         QSqlQuery query(*dbSQL);
         query.prepare(sql);
-        query.bindValue(0,strMovieName);
-        query.bindValue(1,strLabelId);
         if(query.exec() && query.lastError().type() == QSqlError::NoError){
             dbSQL->commit();  //成功则提交
         }else {
@@ -555,16 +526,18 @@ void AdminMainWindow::addHall(){
     grid->addWidget(btnOkay,4,1,1,1);
     dlgData->setLayout(grid);
     if(dlgData->exec()==QDialog::Accepted){
-//        QString strHall = edtHallId->text();
-        QString strHall= edtHallId->text();
-        strHall+=",'"+edtHallName->text();
-        strHall+="',"+edtHallColumn->text();
-        strHall+=","+edtHallRow->text();
+        QString strHallId=edtHallId->text();
+        QString strHallName=edtHallName->text();
+        QString strHallColumn=edtHallColumn->text();
+        QString strHallRow=edtHallRow->text();
          QSqlQuery query(*dbSQL);
          dbSQL->transaction();   // 开启一个事务
-         QString sql = "call addHall("+strHall+");";
-         qDebug()<<sql;
+         QString sql = "call addHall(?,?,?,?);";
          query.prepare(sql); // 防止注入sql攻击
+         query.bindValue(0,strHallId);
+         query.bindValue(1,strHallName);
+         query.bindValue(2,strHallColumn);
+         query.bindValue(3,strHallRow);
          if(query.exec() && query.lastError().type() == QSqlError::NoError){
                     dbSQL->commit();  //成功则提交
           }else {
@@ -611,43 +584,7 @@ void AdminMainWindow::removeHall(){
 }
 
 void AdminMainWindow::modifyHall(){
-    if(dbSQL == nullptr){
-        QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
-        return;
-    }
-    QDialog *dlgData = new QDialog(this);
-    QPushButton *btnRemove = new QPushButton(BTN_OKAY);
-    connect(btnRemove,SIGNAL(clicked()),dlgData,SLOT(accept()));
-    QLabel *labHallId = new QLabel(HALL_ID);
-    QLineEdit *edtHallId = new QLineEdit();
-    QLabel *labHallName = new QLabel(HALL_NAME);
-    QLineEdit *edtHallName = new QLineEdit();
-    QGridLayout *grid = new QGridLayout();
-    dlgData->setFont(*font);
-    grid->addWidget(labHallId,0,0,1,1);
-    grid->addWidget(edtHallId,0,1,1,2);
-    grid->addWidget(labHallName,1,0,1,1);
-    grid->addWidget(edtHallName,1,1,1,2);
-    grid->addWidget(btnRemove,2,1,1,1);
-    dlgData->setLayout(grid);
-    if(dlgData->exec() == QDialog::Accepted){
-        QString hallId = edtHallId->text();
-        QString hallName = edtHallName->text();
-        QString sql = "call modifyHall(?,?);";
-        dbSQL->transaction();
-        QSqlQuery query(*dbSQL);
-        query.prepare(sql);
-        query.bindValue(0,hallId);
-        query.bindValue(1,hallName);
-        if(query.exec() && query.lastError().type() == QSqlError::NoError){
-            dbSQL->commit();  //成功则提交
-        }else {
-            dbSQL->rollback();  //失败则回滚
-            QString error = "errorCode: " + query.lastError().nativeErrorCode();
-            error += ("\nerrorMessage: " + query.lastError().text());
-            QMessageBox::critical(this, ERR_DB_QUERY, error);
-        }
-    }
+
 }
 
 void AdminMainWindow::showTimeLine()
@@ -702,7 +639,7 @@ void AdminMainWindow::showPlayState()
 }
 
 void AdminMainWindow::addPlayState(){
-    if(dbSQL == nullptr){
+if(dbSQL == nullptr){
         QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
         return;
     }
@@ -722,13 +659,14 @@ void AdminMainWindow::addPlayState(){
     grid->addWidget(btnOkay,2,1,1,2);
     dlgData->setLayout(grid);
     if(dlgData->exec()==QDialog::Accepted){
-        QString strPlayState="'"+edtStateID->text();
-        strPlayState+="','"+edtStateDsb->text()+"'";
+        QString strPlayStateId=edtStateID->text();
+        QString strPlayStateDsb=edtStateDsb->text();
         QSqlQuery query(*dbSQL);
         dbSQL->transaction();   // 开启一个事务
-        QString sql = "call addPlayState("+strPlayState+");";
-        qDebug()<<sql;
+        QString sql = "call addPlayState(?,?);";
         query.prepare(sql); // 防止注入sql攻击
+        query.bindValue(0,strPlayStateId);
+        query.bindValue(1,strPlayStateDsb);
         if(query.exec() && query.lastError().type() == QSqlError::NoError){
             dbSQL->commit();  //成功则提交
         }else {
@@ -801,12 +739,14 @@ if(dbSQL == nullptr){
     grid->addWidget(btnOkay,2,1,1,1);
     dlgData->setLayout(grid);
     if(dlgData->exec()==QDialog::Accepted){
-        QString strTimeLine = "'" + edtTktStateId->text();
-        strTimeLine += "','" + edtTktStateDsb->text()+"'";
+        QString strTimeLineId=edtTktStateId->text();
+        QString strTimeLineDsb=edtTktStateDsb->text();
         QSqlQuery query(*dbSQL);
         dbSQL->transaction(); // 开启一个事务
-        QString sql = "call addTimeLine(" + strTimeLine+");";
+        QString sql = "call addTimeLine(?,?);";
         query.prepare(sql);  // 防止注入sql攻击
+        query.bindValue(0,strTimeLineId);
+        query.bindValue(1,strTimeLineDsb);
         if(query.exec() && query.lastError().type() == QSqlError::NoError){
             dbSQL->commit();  //成功则提交
         }else {
@@ -861,7 +801,7 @@ void AdminMainWindow::showStage()
 }
 
 void AdminMainWindow::addStage(){
- if(dbSQL == nullptr){
+if(dbSQL == nullptr){
         QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
         return;
     }
@@ -896,18 +836,23 @@ void AdminMainWindow::addStage(){
     grid->addWidget(edtTimeNum,5,1,1,2);
     grid->addWidget(btnOkay,6,1,1,1);
     dlgData->setLayout(grid);
-    if(dlgData->exec()==QDialog::Accepted){
-        QString strStage=edtHallId->text();
-        strStage+=",'"+edtMovieName->text();
-        strStage+="',"+edtPrice->text();
-        strStage+=","+edtStageNumber->text();
-//        strStage+=",'"+edtStateId->text()+"'";
-        strStage+=","+edtTimeNum->text();
-
+    if(dlgData->exec()==QDialog::Accepted){ 
+        QString strHallId=edtHallId->text();
+        QString strMovieName=edtMovieName->text();
+        QString strPrice=edtPrice->text();
+        QString strStageNumber=edtStageNumber->text();
+        QString strTimeNum=edtTimeNum->text();
+//        QString strStateId=edtStateId->text();
         QSqlQuery query(*dbSQL);
         dbSQL->transaction(); // 开启一个事务
-        QString sql = "call addStage(" + strStage+");";
+        QString sql = "call addStage(?,?,?,?,?);";
         query.prepare(sql); // 防止注入sql攻击
+        query.bindValue(0,strHallId);
+        query.bindValue(1,strTimeNum);
+        query.bindValue(2,strMovieName);
+//        query.bindValue(3,strStateId);
+        query.bindValue(3,strPrice);
+        query.bindValue(4,strStageNumber);
         if(query.exec() && query.lastError().type() == QSqlError::NoError){
             dbSQL->commit();  //成功则提交
         }else {
