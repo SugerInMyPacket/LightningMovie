@@ -12,17 +12,11 @@
 #include <qsqlerror.h>
 #include <qstring.h>
 #include <qtimer.h>
+#include "dbconnector.h"
 
 namespace Ui {
 class DlgRegister;
 }
-
-/*
- * 1. 用户输入数据的验证器
- * 2. 数据库的管理操作submit槽函数
- * 3. 窗口图标和组件图标
- * 4. 验证码发送API 
- */
 
 class DlgRegister : public QDialog {
     Q_OBJECT

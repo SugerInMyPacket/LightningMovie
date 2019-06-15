@@ -9,17 +9,20 @@ extern bool permissionFlag;
 int main(int argc, char* argv[])
 {
     QApplication a(argc, argv);
-    DlgLogin *login = new DlgLogin();
-    if(login->exec() == QDialog::Accepted){
-        if(permissionFlag){
-            AdminMainWindow *admin = new AdminMainWindow;
-            admin->show();
-        }else{
-            CdtorMainWindow *cdt = new CdtorMainWindow;
-            cdt->show();
-        }
-    }else{
-        exit(0);
-    }
+    AdminMainWindow *admin = new AdminMainWindow;
+    admin->show();
     return a.exec();
 }
+
+//DlgLogin *login = new DlgLogin();
+//if(login->exec() == QDialog::Accepted){
+//    if(permissionFlag){
+//        AdminMainWindow *admin = new AdminMainWindow;
+//        admin->show();
+//    }else{
+//        CdtorMainWindow *cdt = new CdtorMainWindow;
+//        cdt->show();
+//    }
+//}else{
+//    exit(0);
+//}
