@@ -44,10 +44,6 @@ private slots:
     void buttonSubmit();
     void buttonCancel();
     void buttonQuit();
-    void buttonSendPhnVerCode();
-    void buttonSendMlVerCode();
-    void updatePhSend();
-    void updateMaSend();
 
 private:
     Ui::DlgRegister* ui;

@@ -1,6 +1,7 @@
 #include "dlglogin.h"
 #include "ui_dlglogin.h"
 
+bool permissionFlag;
 extern const QString ORGANIZATION;
 extern const QString APP_NAME;
 extern const QString LAB_USER;
@@ -31,8 +32,6 @@ DlgLogin::DlgLogin(QWidget* parent)
     : QDialog(parent)
     , ui(new Ui::DlgLogin)
 {
-    strUser = "";
-    strPass = "";
     bIsMoving = false;
     dlgRegister = nullptr;
     dlgFindPswd = nullptr;
@@ -48,7 +47,6 @@ DlgLogin::DlgLogin(QWidget* parent)
     this->setAttribute(Qt::WA_DeleteOnClose);
     this->setWindowFlag(Qt::SplashScreen);
     connectDatabase();
-    readSettings();
 }
 
 DlgLogin::~DlgLogin()
@@ -72,67 +70,14 @@ void DlgLogin::initializeUi()
     ui->btnRegister->setText(LAB_REGESTER);
 }
 
-void DlgLogin::readSettings()
-{
-    QSettings settings(organization, appName);
-    tryCount = settings.value("tryCount", 1).toInt();
-    if (settings.value("save", false).toBool()) {
-        strUser = settings.value("user", "").toString();
-        strPass = settings.value("pass", "").toString();
-        bool AutoLogin = settings.value("autoLogin", false).toBool();
-        bool Admin = settings.value("identity", false).toBool();
-        ui->edtUser->setText(strUser);
-        ui->edtPass->setText(strPass);
-        ui->chbAdmin->setChecked(Admin);
-        ui->chbPass->setChecked(true);
-        ui->chbAuto->setChecked(AutoLogin);
-        if (AutoLogin) {
-            buttonLogin();
-        }
-    }
-}
-
-void DlgLogin::writeSettings()
-{
-    QSettings settings(organization, appName);
-    settings.setValue("tryCount", tryCount);
-    if (ui->chbPass->isChecked()) {
-        settings.setValue("save", true);
-        settings.setValue("identity", ui->chbAdmin->isChecked());
-        settings.setValue("auto", ui->chbAuto->isChecked());
-        settings.setValue("user", strUser);
-        settings.setValue("Pass", strPass);
-    } else {
-        settings.clear();
-    }
-    return;
-}
-
 void DlgLogin::connectDatabase()
 {
-    db = QSqlDatabase::addDatabase(SQL_DB_TYPE);
-    db.setPort(SQL_DB_PORT);
-    db.setHostName(SQL_DB_HOST);
-    db.setUserName(SQL_DB_USER);
-    db.setPassword(SQL_DB_PSWD);
-    db.setDatabaseName(SQL_DB_NAME);
-    if (!db.open()) {
-        QString error = "error code: ";
-        error += (db.lastError().nativeErrorCode() + "\n");
-        error += "error text: ";
-        error += db.lastError().text();
-        QMessageBox::critical(this, ERR_DB_OPEN, error);
+    QSqlDatabase *tmp = DBConnector::ConnectDB();
+    if(tmp == nullptr){
         exit(0);
+    }else{
+        db = *DBConnector::ConnectDB();
     }
-}
-
-QString DlgLogin::encrypt(const QString& _str)
-{
-    QByteArray bytContainer;
-    bytContainer.append(_str);
-    QCryptographicHash hash(QCryptographicHash::Md5);
-    hash.addData(bytContainer);
-    return hash.result().toHex();
 }
 
 void DlgLogin::mousePressEvent(QMouseEvent* event)
@@ -170,29 +115,54 @@ void DlgLogin::closeEvent(QCloseEvent* event)
 void DlgLogin::buttonLogin()
 {
     bool legal = false;
-    if (strUser.isEmpty()) {
-        strUser = ui->edtUser->text();
-        strUser = strUser.trimmed();
-        //验证用户名是否合法
+    strUserNumber = ui->edtUser->text();
+    strUserPass = ui->edtPass->text();
+    if (strUserNumber.isEmpty() || strUserPass.isEmpty()) {
+        QMessageBox::critical(this,ERR_LOGIN,ERR_LOGIN_COMPELETE);
+        return;
     }
-    if (strPass.isEmpty()) {
-        QString strPassTmp = ui->edtPass->text();
-        strPass = encrypt(strPassTmp);
+    if(!db.isOpen()){
+        QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_NULL);
+        return;
     }
 
-    if (legal) {
-        //        writeSettings();
+    QSqlQuery query(db);
+    QString sql;
+    bool bIsAdmin = ui->chbAdmin->isChecked();
+    if(bIsAdmin){
+        sql = "select adminNumber from adminInfo where adminPass = ?;";
+    }else{
+        sql ="select cdtNumber from conductor where cdtPass  = ?;";
+    }
+    query.prepare(sql);
+    query.bindValue(0,strUserPass);
+    if(query.exec() && query.lastError().type() == QSqlError::NoError){
+        while(query.next()){
+            QString user = query.value(0).toString();
+            if(strUserNumber == user){
+                legal = true;
+            }
+        }
+    }else{
+        QString error = "Error Code: " + query.lastError().nativeErrorCode();
+        error += ("\nError Message: " + query.lastError().text());
+        QMessageBox::critical(this, ERR_DB_QUERY, error);
+        return;
+    }
 
-        this->accept();
-    } else {
+    if(!legal){
         tryCount++;
         if (tryCount > 3) {
-            QMessageBox::critical(this, ERR_CRITICLE_LOGIN, ERR_LAST_CHANCE);
+            QMessageBox::critical(this, ERR_LOGIN, ERR_LAST_CHANCE);
             this->reject();
         } else {
-            QMessageBox::critical(this, ERR_CRITICLE_LOGIN, ERR_WRONG_PSWD);
+            QMessageBox::critical(this,ERR_LOGIN,ERR_LOGIN_WRONG);
         }
+        return;
     }
+    //for legal user
+    permissionFlag = bIsAdmin;
+    this->accept();
     return;
 }
 
@@ -227,7 +197,6 @@ void DlgLogin::buttonOpenRegisterDlg()
         dlgRegister = new DlgRegister(this);
     }
     dlgRegister->show();
-    this->hide();
     return;
 }
 

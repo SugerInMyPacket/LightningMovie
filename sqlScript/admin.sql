@@ -3,33 +3,16 @@ use lightning;
 drop table if exists adminInfo;
 
 create table adminInfo(
-    adminId char(10) not null auto_increment,
+    adminNumber int unsigned not null auto_increment,
     adminName nvarchar(100),
-    adminSex bit,
-    adminAge int unsigned,
+    adminSex char(1) default 'w' not null,
     adminPhone char(11) not null,
-    constraint pk_admin primary key (adminId),
+    adminPass nvarchar(100) not null,
+    constraint pk_admin primary key (adminNumber),
     constraint unique_adminPhone unique (adminPhone)
 );
 
-drop table if exists adminSys;
+insert into adminInfo values(20171742, "郭俊帅", 'm','15730343165','qwert');
 
-create table if not exists adminSys(
-    adminId char(10) not null,
-    adminPass varchar(100) not null,
-    constraint pk_adminSys primary key (adminId) ,
-);
-
-
-drop table if exists adminRight;
-
-create table if not exists adminRight(
-    adminId char(10) not null,
-    tablename varchar(100) not null,
-    ritSelect bit,
-    ritDelete bit,
-    ritInsert bit,
-    ritUpdate bit
-    constraint pk_adminRight primary key (adminId,tablename)
-);
+select * from adminInfo;
 

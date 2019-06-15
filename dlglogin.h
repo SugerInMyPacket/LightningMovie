@@ -14,6 +14,8 @@
 #include <qsqldatabase.h>
 #include <qsqlerror.h>
 #include <qsqlquery.h>
+#include "dbconnector.h"
+
 
 namespace Ui {
 class DlgLogin;
@@ -23,7 +25,6 @@ class DlgLogin;
  *1. 还欠缺账户冻结功能
  * 2. 还欠缺两个验证器(验证账户的正确性)
  * 3. 登陆信号函数还欠缺数据库查询的部分
- * 4. 设置窗口图标和组件图标
  */
 
 class DlgLogin : public QDialog {
@@ -39,8 +40,8 @@ public:
 
 private:
     bool bIsMoving;
-    QString strUser;
-    QString strPass;
+    QString strUserNumber;
+    QString strUserPass;
     bool identity;
     QPoint qpLastPoint;
     qint32 tryCount;
@@ -50,10 +51,7 @@ private:
     static QString organization;
     static QString appName;
     void initializeUi();
-    void readSettings();
-    void writeSettings();
     void connectDatabase();
-    static QString encrypt(const QString& _str);
 
 protected:
     void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;

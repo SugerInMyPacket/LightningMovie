@@ -37,6 +37,9 @@ const QString ERR_CRITICLE_LOGIN = "登录错误";
 const QString ERR_LAST_CHANCE = "这是最后一次尝试机会，如果仍然失败，此账户会被冻结！";
 const QString ERR_WRONG_PSWD = "账户或者密码错误!";
 const QString ERR_PSWD = "密码非法!";
+const QString ERR_LOGIN = "登录错误";
+const QString ERR_LOGIN_COMPELETE = "登录信息不完整！";
+const QString ERR_LOGIN_WRONG = "登录信息错误！";
 
 const QString DLG_TITLE_REGISTER = "雷霆电影欢迎您!";
 const QString TAB_TITLE_WELCOME = "欢迎";
