@@ -733,11 +733,11 @@ void AdminMainWindow::removePlayState(){
     dlgData->setLayout(grid);
     if(dlgData->exec() == QDialog::Accepted){
         QString state = edtStateId->text();
-        state = state.remove(2,state.length()-2);
-        QString sql = "call removePlayState('"+state+"');";
+        QString sql = "call removePlayState(?);";
         dbSQL->transaction();
         QSqlQuery query(*dbSQL);
         query.prepare(sql);
+        query.addBindValue(state);
         if(query.exec() && query.lastError().type() == QSqlError::NoError){
             dbSQL->commit();  //成功则提交
         }else {
@@ -802,6 +802,7 @@ if(dbSQL == nullptr){
         }
     }
 }
+
 void AdminMainWindow::removeTicketState(){
 if(dbSQL == nullptr){
         QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
@@ -908,9 +909,11 @@ if(dbSQL == nullptr){
         }
     }
 }
+
 void AdminMainWindow::modifyStage(){
 
 }
+
 void AdminMainWindow::removeStage(){
     if(dbSQL == nullptr){
         QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);

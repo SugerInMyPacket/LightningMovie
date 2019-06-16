@@ -9,8 +9,8 @@ extern bool permissionFlag;
 int main(int argc, char* argv[])
 {
     QApplication a(argc, argv);
-    AdminMainWindow *admin = new AdminMainWindow;
-    admin->show();
+    CdtorMainWindow *cdt = new CdtorMainWindow;
+    cdt->show();
     return a.exec();
 }
 
