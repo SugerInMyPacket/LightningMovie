@@ -629,7 +629,90 @@ void AdminMainWindow::showTimeLine()
 }
 
 void AdminMainWindow::addTimeLine(){
+    if(dbSQL == nullptr){
+        QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
+        return;
+    }
+    QDialog *dlgData = new QDialog(this);
+    QPushButton *btnOkay = new QPushButton(BTN_OKAY);
+    connect(btnOkay, SIGNAL(clicked()), dlgData, SLOT(accept()));
 
+    QLabel *labTime = new QLabel(TIME);
+//    QLineEdit *edtTime = new QLineEdit();
+//    QdateTime *datatime=new QdateTime(QdateTime::currentDateTime());
+    QLabel *labPlayTime = new QLabel(PLAY_TIME);
+//    QDateEdit *edtPlayTime = new QDateEdit();
+    QLabel *labClearTime = new QLabel(CLEAR_TIME);
+//    QLineEdit *edtClearTime = new QLineEdit();
+    QLabel *labPalyDate=new QLabel(PLAY_DTAE);
+//    QLineEdit *edtPalyDtae=new QLineEdit();
+    QLabel *labTimeNumber=new QLabel(TIMELINE_NUM);
+    QLineEdit *edtTimeNumber=new QLineEdit();
+    /**/
+    QDateTimeEdit *edtTime = new QDateTimeEdit(QDateTime::currentDateTime(), this);
+//    QDateTimeEdit *edtTime = new QDateTimeEdit(this);
+    edtTime->setDisplayFormat("HH:mm:ss");
+    QDateTimeEdit *edtPlayTime = new QDateTimeEdit(QTime::currentTime(), this);
+    edtPlayTime->setDisplayFormat("HH:mm:ss");
+    QDateTimeEdit *edtClearTime = new QDateTimeEdit(QTime::currentTime(), this);
+    edtClearTime->setDisplayFormat("HH:mm:ss");
+    QDateTimeEdit *edtPalyDtae = new QDateTimeEdit(QDate::currentDate(), this);
+    /*设置只可以选择最近30天内*/
+    edtPalyDtae->setMinimumDate(QDate::currentDate().addDays(-15));  // -15天
+    edtPalyDtae->setMaximumDate(QDate::currentDate().addDays(15));  // +15天
+    edtPalyDtae->setCalendarPopup(true);
+    edtPalyDtae->setDisplayFormat("yyyy/MM/dd");
+//    QDateTimeEdit *edtTime = new QDateTimeEdit(QTime::currentTime(), this);
+    /*
+    QDateEdit *edtPlayTime = new QDateEdit();
+    edtPlayTime->setCalendarPopup(true);
+    QDateEdit *edtClearTime = new QDateEdit();
+    edtClearTime->setCalendarPopup(true);
+    QDateEdit *edtPalyDtae = new QDateEdit();
+    edtPalyDtae->setCalendarPopup(true);
+    */
+    QGridLayout *grid = new QGridLayout();
+    dlgData->setFont(*font);
+    grid->addWidget(labTime,0,0,1,2);
+    grid->addWidget(edtTime,0,2,1,2);
+    grid->addWidget(labPlayTime,1,0,1,2);
+    grid->addWidget(edtPlayTime,1,2,1,2);
+    grid->addWidget(labClearTime,2,0,1,2);
+    grid->addWidget(edtClearTime,2,2,1,2);
+    grid->addWidget(labPalyDate,3,0,1,2);
+    grid->addWidget(edtPalyDtae,3,2,1,2);
+    grid->addWidget(labTimeNumber,4,0,1,2);
+    grid->addWidget(edtTimeNumber,4,2,1,2);
+    grid->addWidget(btnOkay,5,2,1,1);
+    dlgData->setLayout(grid);
+    if(dlgData->exec()==QDialog::Accepted){
+//        QString strTime = edtTime->text();
+//        QString strPlayTime = edtPlayTime->text();
+//        QString strClearTime = edtClearTime->text();
+//        QString strPlayDate = edtPalyDtae->text();
+        QDateTime strTime = edtTime->dateTime();  // 日期时间
+        QDateTime strPlayTime = edtPlayTime->dateTime();  // 日期时间
+        QDateTime strClearTime = edtClearTime->dateTime();  // 日期时间
+        QDate strPlayDate = edtPalyDtae->date();
+        QString strTimeNumber=edtTimeNumber->text();
+        QSqlQuery query(*dbSQL);
+        dbSQL->transaction(); // 开启一个事务
+        QString sql = "call addTimeLine(?,?,?,?,?);";
+        query.prepare(sql); // 防止注入sql攻击
+        query.bindValue(0,strTime);
+        query.bindValue(1,strPlayTime);
+        query.bindValue(2,strClearTime);
+        query.bindValue(3,strPlayDate);
+        query.bindValue(4,strTimeNumber);
+        if(query.exec() && query.lastError().type() == QSqlError::NoError){
+            dbSQL->commit();  //成功则提交
+        }else {
+            dbSQL->rollback();  //失败则回滚
+            QString error = "errorCode: " + query.lastError().nativeErrorCode();
+            error += ("\nerrorMessage: " + query.lastError().text());
+            QMessageBox::critical(this, ERR_DB_QUERY, error);
+        }
+    }
 }
 
 void AdminMainWindow::removeTimeLine(){
@@ -667,7 +750,71 @@ void AdminMainWindow::removeTimeLine(){
 }
 
 void AdminMainWindow::modifyTimeLine(){
+    if(dbSQL == nullptr){
+        QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
+        return;
+    }
+    QDialog *dlgData = new QDialog(this);
+    QPushButton *btnOkay = new QPushButton(BTN_OKAY);
+    connect(btnOkay, SIGNAL(clicked()), dlgData, SLOT(accept()));
 
+    QLabel *labTime = new QLabel(TIME);
+    QLabel *labPlayTime = new QLabel(PLAY_TIME);
+    QLabel *labClearTime = new QLabel(CLEAR_TIME);
+    QLabel *labPalyDate=new QLabel(PLAY_DTAE);
+    QLabel *labTimeNumber=new QLabel(TIMELINE_NUM);
+    QLineEdit *edtTimeNumber=new QLineEdit();
+    /**/
+    QDateTimeEdit *edtTime = new QDateTimeEdit(QDateTime::currentDateTime(), this);
+    edtTime->setDisplayFormat("HH:mm:ss");
+    QDateTimeEdit *edtPlayTime = new QDateTimeEdit(QTime::currentTime(), this);
+    edtPlayTime->setDisplayFormat("HH:mm:ss");
+    QDateTimeEdit *edtClearTime = new QDateTimeEdit(QTime::currentTime(), this);
+    edtClearTime->setDisplayFormat("HH:mm:ss");
+    QDateTimeEdit *edtPalyDtae = new QDateTimeEdit(QDate::currentDate(), this);
+    /*设置只可以选择最近30天内*/
+    edtPalyDtae->setMinimumDate(QDate::currentDate().addDays(-15));  // -15天
+    edtPalyDtae->setMaximumDate(QDate::currentDate().addDays(15));  // +15天
+    edtPalyDtae->setCalendarPopup(true);
+    edtPalyDtae->setDisplayFormat("yyyy/MM/dd");
+    QGridLayout *grid = new QGridLayout();
+    dlgData->setFont(*font);
+    grid->addWidget(labTime,0,0,1,2);
+    grid->addWidget(edtTime,0,2,1,2);
+    grid->addWidget(labPlayTime,1,0,1,2);
+    grid->addWidget(edtPlayTime,1,2,1,2);
+    grid->addWidget(labClearTime,2,0,1,2);
+    grid->addWidget(edtClearTime,2,2,1,2);
+    grid->addWidget(labPalyDate,3,0,1,2);
+    grid->addWidget(edtPalyDtae,3,2,1,2);
+    grid->addWidget(labTimeNumber,4,0,1,2);
+    grid->addWidget(edtTimeNumber,4,2,1,2);
+    grid->addWidget(btnOkay,5,2,1,1);
+    dlgData->setLayout(grid);
+    if(dlgData->exec()==QDialog::Accepted){
+        QDateTime strTime = edtTime->dateTime();  // 日期时间
+        QDateTime strPlayTime = edtPlayTime->dateTime();  // 日期时间
+        QDateTime strClearTime = edtClearTime->dateTime();  // 日期时间
+        QDate strPlayDate = edtPalyDtae->date();
+        QString strTimeNumber=edtTimeNumber->text();
+        QSqlQuery query(*dbSQL);
+        dbSQL->transaction(); // 开启一个事务
+        QString sql = "call modifyTimeLine(?,?,?,?,?);";
+        query.prepare(sql); // 防止注入sql攻击
+        query.bindValue(0,strTime);
+        query.bindValue(1,strPlayTime);
+        query.bindValue(2,strClearTime);
+        query.bindValue(3,strPlayDate);
+        query.bindValue(4,strTimeNumber);
+        if(query.exec() && query.lastError().type() == QSqlError::NoError){
+            dbSQL->commit();  //成功则提交
+        }else {
+            dbSQL->rollback();  //失败则回滚
+            QString error = "errorCode: " + query.lastError().nativeErrorCode();
+            error += ("\nerrorMessage: " + query.lastError().text());
+            QMessageBox::critical(this, ERR_DB_QUERY, error);
+        }
+    }
 }
 
 void AdminMainWindow::showPlayState()
