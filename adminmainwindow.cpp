@@ -89,9 +89,12 @@ void AdminMainWindow::Connect_Signal_Slot()
     connect(ui->actRemovePlayState,SIGNAL(triggered()),this,SLOT(removePlayState()));
 
     connect(ui->actShowTicket, SIGNAL(triggered()), this, SLOT(showTicket()));
+    connect(ui->actAddTicket, SIGNAL(triggered()), this,SLOT(addTicket()));
+    connect(ui->actRemoveTicket,SIGNAL(triggered()),this,SLOT(removeTicket()));
+
     connect(ui->actAddSellState,SIGNAL(triggered()), this, SLOT(addTicketState()));
     connect(ui->actRemoveSellState,SIGNAL(triggered()),this,SLOT(removeTicketState()));
-   
+    connect(ui->actShowSellState,SIGNAL(triggered()),this,SLOT(showTicketState()));
     
     connect(ui->actClearHistory, SIGNAL(triggered()), this, SLOT(clearHistory()));
     connect(ui->actSaveHistory, SIGNAL(triggered()), this, SLOT(saveHistory()));
@@ -131,7 +134,6 @@ void AdminMainWindow::openOneTable(const QString _tableName)
 
     ui->statusBar->showMessage("set tablel headers...");
     int count = query.size();
-    qDebug()<<count<<endl;
     QStringList headers;
     while (query.next()) {
         headers.append(query.value(0).toString());
@@ -415,7 +417,6 @@ void AdminMainWindow::showMovieLabel()
     openOneTable("movielabel");
 }
 
-
 void AdminMainWindow::addMovieLabel(){
       if(dbSQL == nullptr){
           QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
@@ -453,7 +454,6 @@ void AdminMainWindow::addMovieLabel(){
           }
       }
 }
-
 
 void AdminMainWindow::removeMovieLabel(){
     if(dbSQL == nullptr){
@@ -584,7 +584,43 @@ void AdminMainWindow::removeHall(){
 }
 
 void AdminMainWindow::modifyHall(){
-
+    if(dbSQL == nullptr){
+        QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
+        return;
+    }
+    QDialog *dlgData = new QDialog(this);
+    QPushButton *btnOkay = new QPushButton(BTN_OKAY);
+    connect(btnOkay, SIGNAL(clicked()), dlgData, SLOT(accept()));
+    QLabel *labHallId = new QLabel(HALL_ID);
+    QLabel *labHallName = new QLabel(HALL_NAME);
+    QLineEdit *edtHallId = new QLineEdit();
+    QLineEdit *edtHallName = new QLineEdit();
+    QGridLayout *grid = new QGridLayout();
+    dlgData->setFont(*font);
+    grid->addWidget(labHallId,0,0,1,1);
+    grid->addWidget(edtHallId,0,1,1,2);
+    grid->addWidget(labHallName,1,0,1,2);
+    grid->addWidget(edtHallName,1,1,1,2);
+    grid->addWidget(btnOkay,2,1,1,1);
+    dlgData->setLayout(grid);
+    if(dlgData->exec()==QDialog::Accepted){
+        QString strHallId=edtHallId->text();
+        QString strHallName=edtHallName->text();
+        QSqlQuery query(*dbSQL);
+        dbSQL->transaction();   // 开启一个事务
+        QString sql = "call modifyHall(?,?);";
+        query.prepare(sql); // 防止注入sql攻击
+        query.bindValue(0,strHallId);
+        query.bindValue(1,strHallName);
+        if(query.exec() && query.lastError().type() == QSqlError::NoError){
+            dbSQL->commit();  //成功则提交
+        }else {
+            dbSQL->rollback();  //失败则回滚
+            QString error = "errorCode: " + query.lastError().nativeErrorCode();
+            error += ("\nerrorMessage: " + query.lastError().text());
+            QMessageBox::critical(this, ERR_DB_QUERY, error);
+        }
+    }
 }
 
 void AdminMainWindow::showTimeLine()
@@ -593,7 +629,93 @@ void AdminMainWindow::showTimeLine()
 }
 
 void AdminMainWindow::addTimeLine(){
+    if(dbSQL == nullptr){
+        QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
+        return;
+    }
+    QDialog *dlgData = new QDialog(this);
+    QPushButton *btnOkay = new QPushButton(BTN_OKAY);
+    connect(btnOkay, SIGNAL(clicked()), dlgData, SLOT(accept()));
 
+    QLabel *labTime = new QLabel(TIME);
+//    QLineEdit *edtTime = new QLineEdit();
+//    QdateTime *datatime=new QdateTime(QdateTime::currentDateTime());
+    QLabel *labPlayTime = new QLabel(PLAY_TIME);
+//    QDateEdit *edtPlayTime = new QDateEdit();
+    QLabel *labClearTime = new QLabel(CLEAR_TIME);
+//    QLineEdit *edtClearTime = new QLineEdit();
+    QLabel *labPalyDate=new QLabel(PLAY_DTAE);
+//    QLineEdit *edtPalyDtae=new QLineEdit();
+    QLabel *labTimeNumber=new QLabel(TIMELINE_NUM);
+    QLineEdit *edtTimeNumber=new QLineEdit();
+    /**/
+    QDateTimeEdit *edtTime = new QDateTimeEdit(QDateTime::currentDateTime(), this);
+//    QDateTimeEdit *edtTime = new QDateTimeEdit(this);
+    edtTime->setDisplayFormat("HH:mm:ss");
+
+    QDateTimeEdit *edtPlayTime = new QDateTimeEdit(QTime::currentTime(), this);
+    edtPlayTime->setDisplayFormat("HH:mm:ss");
+    QDateTimeEdit *edtClearTime = new QDateTimeEdit(QTime::currentTime(), this);
+    edtClearTime->setDisplayFormat("HH:mm:ss");
+    QDateTimeEdit *edtPalyDtae = new QDateTimeEdit(QDate::currentDate(), this);
+
+    /*设置只可以选择最近30天内*/
+    edtPalyDtae->setMinimumDate(QDate::currentDate().addDays(-15));  // -15天
+    edtPalyDtae->setMaximumDate(QDate::currentDate().addDays(15));  // +15天
+    edtPalyDtae->setCalendarPopup(true);
+    edtPalyDtae->setDisplayFormat("yyyy/MM/dd");
+//    QDateTimeEdit *edtTime = new QDateTimeEdit(QTime::currentTime(), this);
+    /*
+    QDateEdit *edtPlayTime = new QDateEdit();
+    edtPlayTime->setCalendarPopup(true);
+    QDateEdit *edtClearTime = new QDateEdit();
+    edtClearTime->setCalendarPopup(true);
+    QDateEdit *edtPalyDtae = new QDateEdit();
+    edtPalyDtae->setCalendarPopup(true);
+    */
+    QGridLayout *grid = new QGridLayout();
+    dlgData->setFont(*font);
+    grid->addWidget(labTime,0,0,1,2);
+    grid->addWidget(edtTime,0,2,1,2);
+    grid->addWidget(labPlayTime,1,0,1,2);
+    grid->addWidget(edtPlayTime,1,2,1,2);
+    grid->addWidget(labClearTime,2,0,1,2);
+    grid->addWidget(edtClearTime,2,2,1,2);
+    grid->addWidget(labPalyDate,3,0,1,2);
+    grid->addWidget(edtPalyDtae,3,2,1,2);
+    grid->addWidget(labTimeNumber,4,0,1,2);
+    grid->addWidget(edtTimeNumber,4,2,1,2);
+
+    grid->addWidget(btnOkay,5,2,1,1);
+    dlgData->setLayout(grid);
+    if(dlgData->exec()==QDialog::Accepted){
+//        QString strTime = edtTime->text();
+//        QString strPlayTime = edtPlayTime->text();
+//        QString strClearTime = edtClearTime->text();
+//        QString strPlayDate = edtPalyDtae->text();
+        QDateTime strTime = edtTime->dateTime();  // 日期时间
+        QDateTime strPlayTime = edtPlayTime->dateTime();  // 日期时间
+        QDateTime strClearTime = edtClearTime->dateTime();  // 日期时间
+        QDate strPlayDate = edtPalyDtae->date();
+        QString strTimeNumber=edtTimeNumber->text();
+        QSqlQuery query(*dbSQL);
+        dbSQL->transaction(); // 开启一个事务
+        QString sql = "call addTimeLine(?,?,?,?,?);";
+        query.prepare(sql); // 防止注入sql攻击
+        query.bindValue(0,strTime);
+        query.bindValue(1,strPlayTime);
+        query.bindValue(2,strClearTime);
+        query.bindValue(3,strPlayDate);
+        query.bindValue(4,strTimeNumber);
+        if(query.exec() && query.lastError().type() == QSqlError::NoError){
+            dbSQL->commit();  //成功则提交
+        }else {
+            dbSQL->rollback();  //失败则回滚
+            QString error = "errorCode: " + query.lastError().nativeErrorCode();
+            error += ("\nerrorMessage: " + query.lastError().text());
+            QMessageBox::critical(this, ERR_DB_QUERY, error);
+        }
+    }
 }
 
 void AdminMainWindow::removeTimeLine(){
@@ -629,8 +751,73 @@ void AdminMainWindow::removeTimeLine(){
         }
     }
 }
-void AdminMainWindow::modifyTimeLine(){
 
+void AdminMainWindow::modifyTimeLine(){
+    if(dbSQL == nullptr){
+        QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
+        return;
+    }
+    QDialog *dlgData = new QDialog(this);
+    QPushButton *btnOkay = new QPushButton(BTN_OKAY);
+    connect(btnOkay, SIGNAL(clicked()), dlgData, SLOT(accept()));
+
+    QLabel *labTime = new QLabel(TIME);
+    QLabel *labPlayTime = new QLabel(PLAY_TIME);
+    QLabel *labClearTime = new QLabel(CLEAR_TIME);
+    QLabel *labPalyDate=new QLabel(PLAY_DTAE);
+    QLabel *labTimeNumber=new QLabel(TIMELINE_NUM);
+    QLineEdit *edtTimeNumber=new QLineEdit();
+    /**/
+    QDateTimeEdit *edtTime = new QDateTimeEdit(QDateTime::currentDateTime(), this);
+    edtTime->setDisplayFormat("HH:mm:ss");
+    QDateTimeEdit *edtPlayTime = new QDateTimeEdit(QTime::currentTime(), this);
+    edtPlayTime->setDisplayFormat("HH:mm:ss");
+    QDateTimeEdit *edtClearTime = new QDateTimeEdit(QTime::currentTime(), this);
+    edtClearTime->setDisplayFormat("HH:mm:ss");
+    QDateTimeEdit *edtPalyDtae = new QDateTimeEdit(QDate::currentDate(), this);
+    /*设置只可以选择最近30天内*/
+    edtPalyDtae->setMinimumDate(QDate::currentDate().addDays(-15));  // -15天
+    edtPalyDtae->setMaximumDate(QDate::currentDate().addDays(15));  // +15天
+    edtPalyDtae->setCalendarPopup(true);
+    edtPalyDtae->setDisplayFormat("yyyy/MM/dd");
+    QGridLayout *grid = new QGridLayout();
+    dlgData->setFont(*font);
+    grid->addWidget(labTime,0,0,1,2);
+    grid->addWidget(edtTime,0,2,1,2);
+    grid->addWidget(labPlayTime,1,0,1,2);
+    grid->addWidget(edtPlayTime,1,2,1,2);
+    grid->addWidget(labClearTime,2,0,1,2);
+    grid->addWidget(edtClearTime,2,2,1,2);
+    grid->addWidget(labPalyDate,3,0,1,2);
+    grid->addWidget(edtPalyDtae,3,2,1,2);
+    grid->addWidget(labTimeNumber,4,0,1,2);
+    grid->addWidget(edtTimeNumber,4,2,1,2);
+    grid->addWidget(btnOkay,5,2,1,1);
+    dlgData->setLayout(grid);
+    if(dlgData->exec()==QDialog::Accepted){
+        QDateTime strTime = edtTime->dateTime();  // 日期时间
+        QDateTime strPlayTime = edtPlayTime->dateTime();  // 日期时间
+        QDateTime strClearTime = edtClearTime->dateTime();  // 日期时间
+        QDate strPlayDate = edtPalyDtae->date();
+        QString strTimeNumber=edtTimeNumber->text();
+        QSqlQuery query(*dbSQL);
+        dbSQL->transaction(); // 开启一个事务
+        QString sql = "call modifyTimeLine(?,?,?,?,?);";
+        query.prepare(sql); // 防止注入sql攻击
+        query.bindValue(0,strTime);
+        query.bindValue(1,strPlayTime);
+        query.bindValue(2,strClearTime);
+        query.bindValue(3,strPlayDate);
+        query.bindValue(4,strTimeNumber);
+        if(query.exec() && query.lastError().type() == QSqlError::NoError){
+            dbSQL->commit();  //成功则提交
+        }else {
+            dbSQL->rollback();  //失败则回滚
+            QString error = "errorCode: " + query.lastError().nativeErrorCode();
+            error += ("\nerrorMessage: " + query.lastError().text());
+            QMessageBox::critical(this, ERR_DB_QUERY, error);
+        }
+    }
 }
 
 void AdminMainWindow::showPlayState()
@@ -696,12 +883,11 @@ void AdminMainWindow::removePlayState(){
     dlgData->setLayout(grid);
     if(dlgData->exec() == QDialog::Accepted){
         QString state = edtStateId->text();
-        state = state.remove(2,state.length()-2);
         QString sql = "call removePlayState(?);";
         dbSQL->transaction();
         QSqlQuery query(*dbSQL);
         query.prepare(sql);
-        query.bindValue(0,state);
+        query.addBindValue(state);
         if(query.exec() && query.lastError().type() == QSqlError::NoError){
             dbSQL->commit();  //成功则提交
         }else {
@@ -716,6 +902,14 @@ void AdminMainWindow::removePlayState(){
 void AdminMainWindow::showTicket()
 {
     openOneTable("ticket");
+}
+
+void AdminMainWindow::addTicket(){
+
+}
+
+void AdminMainWindow::removeTicket(){
+
 }
 
 void AdminMainWindow::addTicketState(){
@@ -739,14 +933,14 @@ if(dbSQL == nullptr){
     grid->addWidget(btnOkay,2,1,1,1);
     dlgData->setLayout(grid);
     if(dlgData->exec()==QDialog::Accepted){
-        QString strTimeLineId=edtTktStateId->text();
-        QString strTimeLineDsb=edtTktStateDsb->text();
+        QString strTktStateId=edtTktStateId->text();
+        QString strTktStateDsb=edtTktStateDsb->text();
         QSqlQuery query(*dbSQL);
         dbSQL->transaction(); // 开启一个事务
-        QString sql = "call addTimeLine(?,?);";
+        QString sql = "call addTicketState(?,?);";
         query.prepare(sql);  // 防止注入sql攻击
-        query.bindValue(0,strTimeLineId);
-        query.bindValue(1,strTimeLineDsb);
+        query.bindValue(0,strTktStateId);
+        query.bindValue(1,strTktStateDsb);
         if(query.exec() && query.lastError().type() == QSqlError::NoError){
             dbSQL->commit();  //成功则提交
         }else {
@@ -757,6 +951,7 @@ if(dbSQL == nullptr){
         }
     }
 }
+
 void AdminMainWindow::removeTicketState(){
 if(dbSQL == nullptr){
         QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);
@@ -775,10 +970,11 @@ if(dbSQL == nullptr){
     dlgData->setLayout(grid);
     if(dlgData->exec() == QDialog::Accepted){
         QString ticketState = edtTicketState->text();
-        QString sql = "call removeTicketState('"+ticketState+"');";
+        QString sql = "call removeTicketState(?);";
         dbSQL->transaction();
         QSqlQuery query(*dbSQL);
         query.prepare(sql);
+        query.bindValue(0,ticketState);
         if(query.exec() && query.lastError().type() == QSqlError::NoError){
             dbSQL->commit();
         }else {
@@ -863,9 +1059,11 @@ if(dbSQL == nullptr){
         }
     }
 }
+
 void AdminMainWindow::modifyStage(){
 
 }
+
 void AdminMainWindow::removeStage(){
     if(dbSQL == nullptr){
         QMessageBox::critical(this,ERR_DB_OPEN,ERR_DB_DISCONNECT);

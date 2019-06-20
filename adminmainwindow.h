@@ -71,6 +71,8 @@ private slots:
     void removePlayState();
 
     void showTicket();
+    void addTicket();
+    void removeTicket();
 
     void showTicketState();
     void addTicketState();

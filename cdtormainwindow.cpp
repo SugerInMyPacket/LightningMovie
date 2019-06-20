@@ -9,6 +9,16 @@ CdtorMainWindow::CdtorMainWindow(QWidget* parent)
     ui->tables->setTabsClosable(true);
     openMovie = false;
     font = new QFont("Microsoft YaHei",15);
+    ui->labStage->setText(LAB_STAGE);
+    ui->labReturn->setText(LAB_STAGE);
+    ui->labRow->setText(LAB_ROW);
+    ui->labRow1->setText(LAB_ROW);
+    ui->labColumn->setText(LAB_COLUMN);
+    ui->labColumn1->setText(LAB_COLUMN);
+    ui->btnSell->setText(BTN_SELL);
+    ui->btnPrint->setText(BTN_PRINT);
+    ui->btnReturn->setText(BTN_BACK);
+    ui->btnSearch->setText(BTN_FIND);
     ConnectSS();
     ConnectDB();
 }
@@ -41,7 +51,7 @@ void CdtorMainWindow::OpenMovieTable(){
     if(openMovie)return;
 
     QSqlQuery query(*dbSQL);
-    const QString sql = "select * from movieview order by 电影,导演,主演";
+    const QString sql = "select * from movie order by movieName,movieDirector,movieStar";
     query.prepare(sql);
     if(!query.exec() || !(query.lastError().type() == QSqlError::NoError) ){
         QString error = "error code: "+ query.lastError().nativeErrorCode();
@@ -50,7 +60,7 @@ void CdtorMainWindow::OpenMovieTable(){
         return;
     }
 
-    QStringList header = GetHeader("movieview");
+    QStringList header = GetHeader("movie");
      DisplayQuery(query,header,"movie");
 
     openMovie = true;

@@ -15,6 +15,9 @@ const QString LAB_MAIL = "邮箱(&M):";
 const QString LAB_MAIL_VER = "邮箱验证码(&M):";
 const QString LAB_IDENTIFY = "身份(&I):";
 const QString LAB_REGESTER = "没有账户?(&N)";
+const QString LAB_STAGE = "场次(&S)";
+const QString LAB_ROW ="行号(&R)";
+const QString LAB_COLUMN = "列号(&C)";
 const QString EDT_TIP_USER = "您的编号";
 const QString EDT_TIP_PASS = "您的密码";
 const QString CHB_ADMINI = "管理员(&D)";
@@ -27,7 +30,10 @@ const QString BTN_SUBMIT = "提交(&S)";
 const QString BTN_QUIT = "离开(&Q)";
 const QString BTN_SEND = "发送";
 const QString BTN_OKAY = "确定(&O)";
-
+const QString BTN_SELL = "出售(&E)";
+const QString BTN_BACK = "退回(&R)";
+const QString BTN_PRINT = "打印(&P)";
+const QString BTN_FIND = "查找(&F)";
 const QString ERR_DB_OPEN = "数据库连接错误!";
 const QString ERR_DB_NULL = "还未连接数据库!";
 const QString ERR_DB_DISCONNECT = "数据库未连接！";
@@ -88,5 +94,9 @@ const QString MOVIE_PRICE="电影价格";
 const QString TKT_STATE_ID="电影票状态ID";
 const QString TKT_STATE_DSB="电影票状态";
 //const QString STAGE_NUMBER="放映厅号码";
+const QString TIME="进场时间";
+const QString PLAY_TIME="放映时间";
+const QString CLEAR_TIME="结束时间";
+const QString PLAY_DTAE="放映日期";
 
 #endif // STRINGSOURCE_H
