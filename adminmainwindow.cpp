@@ -652,11 +652,13 @@ void AdminMainWindow::addTimeLine(){
     QDateTimeEdit *edtTime = new QDateTimeEdit(QDateTime::currentDateTime(), this);
 //    QDateTimeEdit *edtTime = new QDateTimeEdit(this);
     edtTime->setDisplayFormat("HH:mm:ss");
+
     QDateTimeEdit *edtPlayTime = new QDateTimeEdit(QTime::currentTime(), this);
     edtPlayTime->setDisplayFormat("HH:mm:ss");
     QDateTimeEdit *edtClearTime = new QDateTimeEdit(QTime::currentTime(), this);
     edtClearTime->setDisplayFormat("HH:mm:ss");
     QDateTimeEdit *edtPalyDtae = new QDateTimeEdit(QDate::currentDate(), this);
+
     /*设置只可以选择最近30天内*/
     edtPalyDtae->setMinimumDate(QDate::currentDate().addDays(-15));  // -15天
     edtPalyDtae->setMaximumDate(QDate::currentDate().addDays(15));  // +15天
@@ -683,6 +685,7 @@ void AdminMainWindow::addTimeLine(){
     grid->addWidget(edtPalyDtae,3,2,1,2);
     grid->addWidget(labTimeNumber,4,0,1,2);
     grid->addWidget(edtTimeNumber,4,2,1,2);
+
     grid->addWidget(btnOkay,5,2,1,1);
     dlgData->setLayout(grid);
     if(dlgData->exec()==QDialog::Accepted){
