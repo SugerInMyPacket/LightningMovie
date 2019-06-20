@@ -94,5 +94,9 @@ const QString MOVIE_PRICE="电影价格";
 const QString TKT_STATE_ID="电影票状态ID";
 const QString TKT_STATE_DSB="电影票状态";
 //const QString STAGE_NUMBER="放映厅号码";
+const QString TIME="进场时间";
+const QString PLAY_TIME="放映时间";
+const QString CLEAR_TIME="结束时间";
+const QString PLAY_DTAE="放映日期";
 
 #endif // STRINGSOURCE_H
